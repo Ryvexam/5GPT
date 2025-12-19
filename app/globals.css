@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-black: #0a0a0a;
+  --color-brand-dark: #171717;
+  --color-brand-red: #7f1d1d;
+  --color-brand-brightRed: #dc2626;
+  --color-brand-orange: #ea580c;
+  --color-brand-gold: #d4af37;
+
+  --font-serif: var(--font-cinzel);
+  --font-sans: var(--font-manrope);
+  
+  --image-meat-pattern: url('https://www.transparenttextures.com/patterns/dark-leather.png');
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #171717; 
+}
+::-webkit-scrollbar-thumb {
+    background: #7f1d1d; 
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #dc2626; 
+}
+
+.text-glow {
+    text-shadow: 0 0 20px rgba(220, 38, 38, 0.5);
+}
+
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(127, 29, 29, 0.3), 0 10px 10px -5px rgba(127, 29, 29, 0.1);
+}
+
+/* Marble texture overlay */
+.marble-overlay {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none;
+}
