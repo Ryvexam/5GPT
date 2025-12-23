@@ -1,13 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import {
   Code2,
   Container,
   Search,
   FileText,
-  ShieldCheck,
+  GitCommit,
   Home,
   Settings,
   Menu,
@@ -18,11 +17,8 @@ import {
   Sparkles
 } from 'lucide-react';
 
-const ToolCard = ({ tool, onClick }: { tool: any; onClick: () => void }) => (
-  <div
-    onClick={onClick}
-    className="group relative bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-emerald-900/5 transition-all duration-300 ease-out cursor-pointer overflow-hidden"
-  >
+const ToolCard = ({ tool }) => (
+  <div className="group relative bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-emerald-900/5 transition-all duration-300 ease-out cursor-pointer overflow-hidden">
     <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
     <div className="relative z-10 flex flex-col h-full">
@@ -57,9 +53,8 @@ const ToolCard = ({ tool, onClick }: { tool: any; onClick: () => void }) => (
   </div>
 );
 
-const SidebarItem = ({ icon: Icon, label, active = false, onClick }: { icon: any; label: string; active?: boolean; onClick?: () => void }) => (
+const SidebarItem = ({ icon: Icon, label, active = false }) => (
   <button
-    onClick={onClick}
     className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 group
       ${active
         ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-200'
@@ -73,27 +68,9 @@ const SidebarItem = ({ icon: Icon, label, active = false, onClick }: { icon: any
 );
 
 const App = () => {
-  const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [config, setConfig] = useState<any>(null);
 
   useEffect(() => {
-    // Check if user is configured
-    const config = localStorage.getItem('ai-toolkit-config');
-    if (!config) {
-      router.push('/config');
-      return;
-    }
-
-    try {
-      const parsedConfig = JSON.parse(config);
-      setConfig(parsedConfig);
-    } catch (error) {
-      console.error('Error parsing config:', error);
-      router.push('/config');
-      return;
-    }
-
     const handleResize = () => {
       if (window.innerWidth >= 1024) { // lg breakpoint
         setSidebarOpen(true);
@@ -110,11 +87,10 @@ const App = () => {
 
     // Cleanup
     return () => window.removeEventListener('resize', handleResize);
-  }, [router]);
+  }, []);
 
   const tools = [
     {
-      id: 'unit-test-generator',
       name: "Unit Test Generator",
       category: "Code",
       description: "Generate comprehensive unit tests automatically using AI pattern matching for high coverage.",
@@ -123,7 +99,6 @@ const App = () => {
       iconColor: "text-indigo-600"
     },
     {
-      id: 'smart-dockerizer',
       name: "Smart Dockerizer",
       category: "DevOps",
       description: "Instant Dockerfile creation with intelligent layer caching optimization strategies.",
@@ -132,7 +107,6 @@ const App = () => {
       iconColor: "text-cyan-600"
     },
     {
-      id: 'log-deep-analyzer',
       name: "Log Deep Analyzer",
       category: "Debug",
       description: "Parse gigabytes of logs in seconds to identify anomalies and root causes visually.",
@@ -141,7 +115,6 @@ const App = () => {
       iconColor: "text-amber-600"
     },
     {
-      id: 'readme-architect',
       name: "README Architect",
       category: "Documentation",
       description: "Craft beautiful, structured documentation and READMEs that engage developers instantly.",
@@ -150,11 +123,10 @@ const App = () => {
       iconColor: "text-emerald-600"
     },
     {
-      id: 'legal-analyzer',
-      name: "Legal Privacy Analyzer",
-      category: "Légal",
-      description: "Audit complet : Mentions Légales, CGU, CGV et conformité RGPD à partir d'un lien ou texte.",
-      icon: ShieldCheck,
+      name: "Commit Message Beautifier",
+      category: "Productivité",
+      description: "Standardize your git history with semantic, beautifully formatted commit messages.",
+      icon: GitCommit,
       iconBg: "from-rose-50 to-pink-50",
       iconColor: "text-rose-600"
     }
@@ -176,7 +148,7 @@ const App = () => {
         <div className="h-full flex flex-col p-4 sm:p-6">
           <div className="flex items-center space-x-2 sm:space-x-3 px-2 mb-8 sm:mb-10">
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-200">
-              <Sparkles className="text-white sm:w-5 sm:h-5" size={16} />
+              <Sparkles className="text-white" size={16} className="sm:w-5 sm:h-5" />
             </div>
             <span className="text-lg sm:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-slate-600">
               DevSuite
@@ -186,35 +158,28 @@ const App = () => {
           <nav className="flex-1 overflow-y-auto space-y-6">
             <div>
               <p className="px-4 text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em] mb-4">Main</p>
-              <SidebarItem icon={Home} label="Home" active onClick={() => router.push('/')} />
+              <SidebarItem icon={Home} label="Home" active />
             </div>
 
             <div>
               <p className="px-4 text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em] mb-4">My Tools</p>
               <div className="space-y-1">
                 {tools.map((tool, idx) => (
-                  <SidebarItem
-                    key={idx}
-                    icon={tool.icon}
-                    label={tool.name}
-                    onClick={() => router.push(`/tools/${tool.id}`)}
-                  />
+                  <SidebarItem key={idx} icon={tool.icon} label={tool.name} />
                 ))}
               </div>
             </div>
           </nav>
 
           <div className="mt-auto pt-4 sm:pt-6 border-t border-slate-100">
-            <SidebarItem icon={Settings} label="Settings" onClick={() => router.push('/settings')} />
+            <SidebarItem icon={Settings} label="Settings" />
             <div className="mt-3 sm:mt-4 flex items-center space-x-2 sm:space-x-3 px-2 p-2 sm:p-3 rounded-lg sm:rounded-xl bg-slate-50 border border-slate-100">
               <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-slate-200 overflow-hidden flex-shrink-0">
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="User" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-semibold text-slate-700 truncate">Alex Developer</p>
-                <p className="text-[10px] text-slate-500 truncate">
-                  {config?.provider === 'openai' ? 'OpenAI' : 'Mistral AI'}
-                </p>
+                <p className="text-[10px] text-slate-500 truncate">Pro Account</p>
               </div>
             </div>
           </div>
@@ -289,11 +254,7 @@ const App = () => {
           {/* Tools Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {tools.map((tool, index) => (
-              <ToolCard
-                key={index}
-                tool={tool}
-                onClick={() => router.push(`/tools/${tool.id}`)}
-              />
+              <ToolCard key={index} tool={tool} />
             ))}
           </div>
 
