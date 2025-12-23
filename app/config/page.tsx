@@ -22,19 +22,19 @@ const AI_PROVIDERS = {
       { id: 'gpt-4.1', name: 'GPT-4.1', description: 'Powerful general-purpose model' }
     ],
     defaultModel: 'gpt-5.2',
-    color: 'bg-blue-600',
-    textColor: 'text-blue-600'
+    color: 'bg-[#74AA9C]',
+    textColor: 'text-[#74AA9C]'
   },
   mistral: {
     name: 'Mistral AI',
     models: [
-      { id: 'mistral-large-2411', name: 'Mistral Large 24.11', description: 'State-of-the-art multimodal model (Free)' },
-      { id: 'codestral', name: 'Codestral', description: 'Specialized for coding assistance (Free)' },
-      { id: 'pixtral-large', name: 'Pixtral Large', description: 'Multimodal model for text and images (Free)' }
+      { id: 'mistral-large-latest', name: 'Mistral Large', description: 'Le modèle flagship le plus puissant de Mistral' },
+      { id: 'devstral-medium-latest', name: 'Devstral Medium', description: 'Équilibre parfait entre vitesse et intelligence pour le code' },
+      { id: 'devstral-small-latestdev', name: 'Devstral Small', description: 'Modèle ultra-rapide optimisé pour les tâches simples' }
     ],
-    defaultModel: 'mistral-large-2411',
-    color: 'bg-purple-600',
-    textColor: 'text-purple-600'
+    defaultModel: 'mistral-large-latest',
+    color: 'bg-orange-500',
+    textColor: 'text-orange-500'
   }
 };
 
@@ -47,6 +47,7 @@ export default function ConfigPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isTesting, setIsTesting] = useState(false);
   const [isConnectionValid, setIsConnectionValid] = useState(false);
+  const [testStatus, setTestStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const handleProviderSelect = (provider: keyof typeof AI_PROVIDERS) => {
     setSelectedProvider(provider);
@@ -63,6 +64,7 @@ export default function ConfigPage() {
 
     setIsTesting(true);
     setIsConnectionValid(false);
+    setTestStatus('idle');
 
     try {
       const response = await fetch('/api/test-key', {
@@ -79,14 +81,13 @@ export default function ConfigPage() {
 
       if (response.ok) {
         setIsConnectionValid(true);
-        alert('Connection successful! Your API key is valid.');
+        setTestStatus('success');
       } else {
-        const errorData = await response.json();
-        alert(`Connection failed: ${errorData.error || 'Invalid API key'}`);
+        setTestStatus('error');
       }
     } catch (error) {
       console.error('Test connection error:', error);
-      alert('An error occurred while testing the connection.');
+      setTestStatus('error');
     } finally {
       setIsTesting(false);
     }
@@ -361,6 +362,17 @@ export default function ConfigPage() {
                   )}
                   <span className="font-medium">Check Connection</span>
                 </button>
+
+                {testStatus === 'success' && (
+                  <p className="text-emerald-600 text-sm font-medium mt-2">
+                    ✓ Connection successful! Your API key is valid.
+                  </p>
+                )}
+                {testStatus === 'error' && (
+                  <p className="text-rose-600 text-sm font-medium mt-2">
+                    ✕ Connection failed. Please check your API key.
+                  </p>
+                )}
               </div>
 
               <div className="border-t border-slate-200 pt-6">
@@ -394,3 +406,4 @@ export default function ConfigPage() {
     </div>
   );
 }
+

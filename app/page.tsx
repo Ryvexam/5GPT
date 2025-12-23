@@ -13,15 +13,14 @@ import {
   Menu,
   ChevronRight,
   ArrowUpRight,
-  Clock,
-  Calendar,
-  Sparkles
+  Sparkles,
+  BookOpen
 } from 'lucide-react';
 
-const ToolCard = ({ tool, onClick }: { tool: any; onClick: () => void }) => (
+const ToolCard = ({ tool, onClick, className = "" }: { tool: any; onClick: () => void; className?: string }) => (
   <div
     onClick={onClick}
-    className="group relative bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-emerald-900/5 transition-all duration-300 ease-out cursor-pointer overflow-hidden"
+    className={`group relative bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-emerald-900/5 transition-all duration-300 ease-out cursor-pointer overflow-hidden ${className}`}
   >
     <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
@@ -114,6 +113,25 @@ const App = () => {
 
   const tools = [
     {
+      id: 'technical-documentation',
+      name: "Documentation Technique",
+      category: "Admin",
+      description: "Découvre notre processus : pourquoi ces outils, l'analyse de nos techniques de Prompt Engineering et les choix des modèles IA.",
+      icon: BookOpen,
+      iconBg: "from-indigo-50 to-violet-50",
+      iconColor: "text-indigo-600",
+      fullWidth: true
+    },
+    {
+      id: 'legal-analyzer',
+      name: "Is the website compliant?",
+      category: "Légal",
+      description: "Audit profond : Scanne l'accueil et les pages légales (Mentions, CGU, RGPD) pour une vérification de conformité totale.",
+      icon: ShieldCheck,
+      iconBg: "from-rose-50 to-pink-50",
+      iconColor: "text-rose-600"
+    },
+    {
       id: 'unit-test-generator',
       name: "Unit Test Generator",
       category: "Code",
@@ -148,15 +166,6 @@ const App = () => {
       icon: FileText,
       iconBg: "from-emerald-50 to-teal-50",
       iconColor: "text-emerald-600"
-    },
-    {
-      id: 'legal-analyzer',
-      name: "Legal Privacy Analyzer",
-      category: "Légal",
-      description: "Audit complet : Mentions Légales, CGU, CGV et conformité RGPD à partir d'un lien ou texte.",
-      icon: ShieldCheck,
-      iconBg: "from-rose-50 to-pink-50",
-      iconColor: "text-rose-600"
     }
   ];
 
@@ -243,56 +252,13 @@ const App = () => {
         {/* Content Area */}
         <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
 
-          {/* Stats Row */}
-          <div className="mb-8 lg:mb-12">
-            <div className="max-w-sm sm:max-w-md bg-emerald-900 rounded-2xl sm:rounded-[2rem] p-6 sm:p-8 text-white relative overflow-hidden group shadow-2xl shadow-emerald-900/20">
-              <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-800 rounded-full -mr-20 -mt-20 opacity-30 group-hover:scale-110 transition-transform duration-700"></div>
-              <div className="absolute bottom-0 left-0 w-24 h-24 bg-teal-400 rounded-full -ml-12 -mb-12 opacity-10 group-hover:scale-125 transition-transform duration-700"></div>
-
-              <div className="relative z-10">
-                <div className="flex items-center justify-between mb-8">
-                  <div className="p-3 bg-emerald-800/50 rounded-2xl backdrop-blur-sm">
-                    <Clock size={24} className="text-emerald-300" />
-                  </div>
-                  <div className="flex items-center space-x-1 bg-emerald-800/50 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
-                    <Calendar size={12} />
-                    <span>Monthly View</span>
-                  </div>
-                </div>
-
-                <p className="text-emerald-200/80 text-xs sm:text-sm font-medium mb-1">Estimated Time Saved</p>
-                <div className="flex items-baseline space-x-2">
-                  <h3 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">128h</h3>
-                  <span className="text-emerald-400 font-bold text-xs sm:text-sm">/ mo</span>
-                </div>
-
-                <div className="mt-8 pt-6 border-t border-emerald-800/50 flex justify-between items-center">
-                  <div className="flex flex-col">
-                    <span className="text-[10px] text-emerald-400 uppercase font-bold tracking-widest">Efficiency Rate</span>
-                    <span className="text-lg font-bold">+24% <span className="text-xs font-normal text-emerald-300 opacity-60">vs last mo</span></span>
-                  </div>
-                  <button className="p-2 bg-white/10 hover:bg-white/20 rounded-xl transition-colors">
-                    <ArrowUpRight size={20} className="text-white" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between mb-6 sm:mb-8">
-            <h2 className="text-lg sm:text-xl font-bold text-slate-800 flex items-center space-x-2">
-              <span>Quick Access Tools</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-            </h2>
-          </div>
-
-          {/* Tools Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {tools.map((tool, index) => (
               <ToolCard
                 key={index}
                 tool={tool}
                 onClick={() => router.push(`/tools/${tool.id}`)}
+                className={tool.fullWidth ? "sm:col-span-2 lg:col-span-3" : ""}
               />
             ))}
           </div>

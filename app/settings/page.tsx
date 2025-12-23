@@ -22,19 +22,19 @@ const AI_PROVIDERS = {
       { id: 'gpt-4.1', name: 'GPT-4.1', description: 'Powerful general-purpose model' }
     ],
     defaultModel: 'gpt-5.2',
-    color: 'bg-blue-600',
-    textColor: 'text-blue-600'
+    color: 'bg-[#74AA9C]',
+    textColor: 'text-[#74AA9C]'
   },
   mistral: {
     name: 'Mistral AI',
     models: [
-      { id: 'mistral-large-2411', name: 'Mistral Large 24.11', description: 'State-of-the-art multimodal model (Free)' },
-      { id: 'codestral', name: 'Codestral', description: 'Specialized for coding assistance (Free)' },
-      { id: 'pixtral-large', name: 'Pixtral Large', description: 'Multimodal model for text and images (Free)' }
+      { id: 'mistral-large-latest', name: 'Mistral Large', description: 'Le modèle flagship le plus puissant de Mistral' },
+      { id: 'devstral-medium-latest', name: 'Devstral Medium', description: 'Équilibre parfait entre vitesse et intelligence pour le code' },
+      { id: 'devstral-small-latestdev', name: 'Devstral Small', description: 'Modèle ultra-rapide optimisé pour les tâches simples' }
     ],
-    defaultModel: 'mistral-large-2411',
-    color: 'bg-purple-600',
-    textColor: 'text-purple-600'
+    defaultModel: 'mistral-large-latest',
+    color: 'bg-orange-500',
+    textColor: 'text-orange-500'
   }
 };
 
@@ -46,6 +46,7 @@ export default function SettingsPage() {
   const [apiKey, setApiKey] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isTesting, setIsTesting] = useState(false);
+  const [testStatus, setTestStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   useEffect(() => {
     // Load current configuration
@@ -70,6 +71,7 @@ export default function SettingsPage() {
     if (!selectedProvider || !selectedModel || !apiKey.trim()) return;
 
     setIsTesting(true);
+    setTestStatus('idle');
 
     try {
       const response = await fetch('/api/test-key', {
@@ -85,13 +87,13 @@ export default function SettingsPage() {
       });
 
       if (response.ok) {
-        alert('Connection successful! API key is valid.');
+        setTestStatus('success');
       } else {
-        alert('Connection failed. Please check your API key.');
+        setTestStatus('error');
       }
     } catch (error) {
       console.error('Test error:', error);
-      alert('Connection failed. Please try again.');
+      setTestStatus('error');
     } finally {
       setIsTesting(false);
     }
@@ -306,7 +308,7 @@ export default function SettingsPage() {
                   </p>
                 </div>
 
-                <div className="flex space-x-3">
+                <div className="flex items-center space-x-3">
                   <button
                     onClick={handleTestConnection}
                     disabled={!apiKey.trim() || isTesting}
@@ -319,6 +321,19 @@ export default function SettingsPage() {
                     )}
                     <span>Test Connection</span>
                   </button>
+
+                  {testStatus === 'success' && (
+                    <span className="text-emerald-600 text-sm font-medium flex items-center space-x-1">
+                      <Check size={14} />
+                      <span>Connection OK</span>
+                    </span>
+                  )}
+                  {testStatus === 'error' && (
+                    <span className="text-rose-600 text-sm font-medium flex items-center space-x-1">
+                      <AlertCircle size={14} />
+                      <span>Connection failed</span>
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -349,3 +364,4 @@ export default function SettingsPage() {
     </div>
   );
 }
+

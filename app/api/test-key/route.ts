@@ -42,11 +42,11 @@ export async function POST(request: NextRequest) {
         max_tokens: 10,
       };
     } else if (provider === 'mistral') {
-      // Map to actual Mistral free tier model names
+      // Map to actual Mistral model names
       const modelMapping: { [key: string]: string } = {
-        'mistral-large-2411': 'mistral-large-2411',
-        'codestral': 'codestral',
-        'pixtral-large': 'pixtral-large'
+        'mistral-large-latest': 'mistral-large-latest',
+        'devstral-medium-latest': 'codestral-latest',
+        'devstral-small-latestdev': 'mistral-small-latest'
       };
 
       const actualModel = modelMapping[model] || model;
