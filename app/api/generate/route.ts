@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const SYSTEM_PROMPTS = {
-  'unit-test-generator': "Tu es un expert QA. Analyse le code fourni et génère des tests unitaires complets (Jest/Pytest selon le langage détecté). Couvre les cas limites (edge cases). Réponds uniquement avec le code des tests.",
-  'smart-dockerizer': "Tu es un expert DevOps. Génère un Dockerfile optimisé 'Production-Ready' pour ce projet. Utilise le multi-stage build pour réduire la taille de l'image. Ajoute des commentaires expliquant chaque étape.",
-  'log-deep-analyzer': "Tu es un ingénieur SRE Senior. Analyse ce log d'erreur. Utilise la méthode 'Chain of Thought' : 1. Identifie le service fautif. 2. Explique la cause racine. 3. Propose le fix immédiat. Formatte la réponse en Markdown structuré.",
+  'tech-stack-modernizer': "Tu es un expert en architecture logicielle et modernisation de stack (Legacy to Modern). Ton rôle est d'analyser une stack technique et de proposer une stratégie de modernisation.\n\nVoici des exemples de modernisation (Few-shot) :\n- Legacy : jQuery + PHP direct -> Modern : Next.js + API Routes + Tailwind\n- Legacy : CSS local/inline -> Modern : Tailwind CSS ou CSS Modules\n- Legacy : REST API simple -> Modern : GraphQL ou tRPC avec validation Zod\n\nATTENTION : Si on te fournit des INDICATEURS TECHNIQUES DÉTECTÉS (issus de l'analyse du HTML), utilise-les en PRIORITÉ pour identifier la stack actuelle. Ces indicateurs sont plus fiables que le contenu texte seul.\n\nGÉNÈRE UN RAPPORT STRUCTURÉ EN MARKDOWN avec les sections suivantes (formatage adapté pour PDF) :\n\n# RAPPORT D'ANALYSE TECH STACK\n\n## 1. 🔗 PAGES CONSULTÉES\n\nSi des pages ont été analysées (URL fournie), liste-les ici :\n- [URL de la page analysée]\n\n## 2. 📊 STACK ACTUELLE DÉTECTÉE\n\nPrésente la stack sous forme de tableau Markdown :\n\n| Composant | Technologie Détectée | Version/Note |\n| :--- | :--- | :--- |\n| Framework Frontend | ... | ... |\n| Langage | ... | ... |\n| CSS Framework | ... | ... |\n| Build Tool | ... | ... |\n| Autres | ... | ... |\n\n## 3. ⚖️ VERDICT\n\n**IMPORTANT - CAS D'UNE STACK MODERNE :**\nSi la stack détectée est déjà moderne (Next.js, React moderne, Vue 3, Angular moderne, Tailwind CSS, TypeScript, etc.), alors :\n- ✅ **VERDICT : STACK MODERNE - VALIDÉE ✅**\n- Indique clairement que la stack est à jour et moderne\n\n**CAS D'UNE STACK LEGACY :**\nSi la stack détectée est legacy (jQuery, PHP direct, CSS inline, etc.), alors :\n- ⚠️ **VERDICT : STACK LEGACY - MIGRATION RECOMMANDÉE**\n- Indique clairement que la stack nécessite une modernisation\n\n## 4. 🎯 CIBLE MODERNE (UNIQUEMENT SI STACK LEGACY)\n\nSi stack legacy, présente le tableau de migration :\n\n| Composant Actuel | Technologie Recommandée (2026) | Raison |\n| :--- | :--- | :--- |\n| ... | ... | ... |\n\n**N'UTILISE PAS CETTE SECTION SI LA STACK EST MODERNE.**\n\n## 5. 📋 PLAN DE MIGRATION (UNIQUEMENT SI STACK LEGACY)\n\nSi stack legacy, utilise la méthode 'Chain of Thought' pour détailler les étapes :\n\n### Phase 1 : Préparation\n- ...\n\n### Phase 2 : Migration Progressive\n- ...\n\n### Phase 3 : Tests & Validation\n- ...\n\n**N'UTILISE PAS CETTE SECTION SI LA STACK EST MODERNE.**\n\n## 6. 💡 RECOMMANDATIONS\n\n**SI STACK MODERNE :**\n- Liste des optimisations mineures possibles (performance, DX, SEO, etc.)\n- Ou indique 'Stack optimale, aucune action requise'\n\n**SI STACK LEGACY :**\n- Gains attendus : Performance, DX (Developer Experience), SEO, Sécurité\n- Priorités et risques à considérer\n\n## 7. 📈 RÉSUMÉ EXÉCUTIF\n\nUn paragraphe concis résumant l'analyse et les recommandations.\n\n---\n\n**FORMATAGE :** Utilise des emojis, des tableaux Markdown, des listes à puces, et des sections bien structurées. Le rapport doit être lisible et professionnel pour une impression PDF.",
+  'feature-architect': "Tu es un Lead Tech Senior et Product Manager expérimenté. Ton objectif est de sécuriser le développement en pensant à tout ce que le développeur a pu oublier.\n\nAnalyse la demande et produis un document de spécification technique complet en Markdown :\n\n# 🏗 SPÉCIFICATION : [Nom de la feature]\n\n## 1. 📝 USER STORIES & SCÉNARIOS\nUtilise le format Gherkin (Given/When/Then) pour :\n- Le Happy Path (cas nominal)\n- Les Edge Cases (erreurs, réseau coupé, droits manquants...)\n\n## 2. ⚙️ ANALYSE D'IMPACT (HIDDEN WORK)\nListe exhaustive des impacts techniques :\n- **Base de données** : Schéma, migrations nécessaires ?\n- **API / Backend** : Nouveaux endpoints, validation, sécurité ?\n- **Frontend** : Nouveaux états, composants, gestion d'erreurs ?\n- **Tiers** : Emails transactionnels, webhooks, jobs asynchrones ?\n\n## 3. 🛡 SÉCURITÉ & PERFORMANCE\nPoints de vigilance spécifiques (ex: Rate limiting, Injection, N+1 queries).\n\n## 4. ⏱ ESTIMATION & DÉCOUPAGE\nDécoupe en tâches techniques atomiques (< 4h) et estime la complexité globale (T-Shirt Sizing : XS/S/M/L/XL) avec une justification.",
   'readme-architect': "Tu es un Technical Writer. Rédige un fichier README.md professionnel à partir de ce code ou de cette description. Inclus : Titre, Badges, Installation, Usage, et Contribution. Sois clair et concis.",
   'legal-analyzer': "Tu es un expert en droit numérique, RGPD et conformité web (expertises LCEN et RGPD). Ton rôle est d'analyser une entité à travers son site web.\n\nOn t'a fourni le contenu de la page d'accueil ET potentiellement des pages légales trouvées (Mentions Légales, CGU, CGV, Politique de Confidentialité).\n\nAnalyse l'ensemble et génère un RAPPORT DE CONFORMITÉ STRUCTURÉ :\n\n1. 🔗 PAGES ANALYSÉES : Liste les URLs que tu as analysées (elles sont fournies au début du contexte sous 'PAGES ANALYSÉES').\n\n2. 🚩 RAPPEL DES RISQUES : Un court paragraphe percutant sur les risques (amendes, sanctions pénales) liés au non-respect de la LCEN et du RGPD.\n\n3. 📊 IDENTIFICATION DE L'ENTITÉ : Présente les informations suivantes UNIQUEMENT sous forme d'un tableau Markdown.\n\n| Champ | Valeur |\n| :--- | :--- |\n| Nom de l'entreprise / Entité | ... |\n| SIRET / Siren | (Liste tous les numéros trouvés ou 'Non requis (Portfolio personnel)') |\n| Responsable de publication | ... |\n| Hébergeur | ... |\n| Localisation serveur | ... |\n| Contact | ... |\n\n4. 🏢 ANALYSE DE L'ACTIVITÉ :\n   - **Type de site** : Détermine s'il s'agit d'un site professionnel (commercial, agence, service payant) ou d'un site non-professionnel (portfolio étudiant, blog personnel, projet open-source sans but lucratif).\n   - **Activité déduite du site** : Décris brièvement l'activité identifiée.\n   - **Activité officielle (API GOUV)** : Analyse CHAQUE SIRET/SIREN trouvé et indique son activité officielle. Si aucun n'est trouvé, indique-le.\n   - **Verdict de cohérence** : Compare l'activité réelle et les objets sociaux trouvés.\n     - Si c'est un portfolio personnel/étudiant : Précise que le SIRET n'est pas requis.\n     - Si c'est un site commercial SANS SIRET : Signale le manquement comme non-conforme.\n     - Si les activités sont totalement opposées (ex: vente de thé vs informatique) : Indique '🚨 POSSIBLE FRAUDE OU ACTIVITÉ ILLÉGALE'.\n   - **Risques associés** : Liste les risques spécifiques si nécessaire.\n   - **Note sur le SIRET** : Rappelle la règle (Requis pour toute vente/service pro, Non requis pour usage personnel).\n\n5. 🔍 AUDIT DES DOCUMENTS : Analyse les contenus extraits et indique 'PRÉSENT ✅' ou 'ABSENT ❌' :\n   - **Mentions Légales**\n   - **CGU**\n   - **CGV** (indispensable si site marchand)\n   - **Politique de Confidentialité / RGPD**\n   - **Gestion des Cookies**\n\n6. ⚠️ CLAUSES & MANQUEMENTS : Liste les points de non-conformité.\n\n7. ⚖️ VERDICT FINAL : 'CONFORME ✅', 'PARTIELLEMENT CONFORME ⚠️' ou 'NON CONFORME ❌'.\n\nIMPORTANT : Ne sois pas agressif sur la fraude pour un simple portfolio. Si c'est un portfolio sans vente de service direct, le verdict peut être CONFORME même sans SIRET si l'hébergeur est mentionné."
 };
@@ -147,6 +146,174 @@ function findLegalLinks(html: string, baseUrl: string): string[] {
     .map(l => l.url);
 }
 
+function detectTechStack(html: string): string {
+  const indicators: string[] = [];
+  
+  // Déclarer hasNextJsStatic au début pour usage global
+  const hasNextJsStatic = html.includes('/_next/static/');
+  
+  // CMS Detection (priorité haute - détecter avant les frameworks)
+  
+  // Shopify detection
+  const hasShopifyContent = html.includes('cdn.shopify.com') || html.includes('shopify.com/s/files/') || 
+                            html.includes('Shopify.theme') || html.includes('shopify-section') ||
+                            /\/apps\/shopify/.test(html) || html.includes('var Shopify =') ||
+                            /shopify.*?\.js/.test(html) || html.includes('myshopify.com');
+  
+  // WordPress detection
+  const hasWordPress = html.includes('/wp-content/') || html.includes('/wp-includes/') || 
+                       html.includes('/wp-json/') || html.includes('wp-emoji-release') ||
+                       html.includes('WordPress') || /wp-content\/themes\//.test(html) ||
+                       html.includes('wp-block-') || html.includes('wp-element-');
+  
+  // Drupal detection
+  const hasDrupal = html.includes('/sites/default/') || html.includes('Drupal.settings') ||
+                    html.includes('drupal.js') || html.includes('drupal-base-path') ||
+                    html.includes('drupal-static');
+  
+  // Magento detection
+  const hasMagento = html.includes('Mage.Cookies') || html.includes('/static/version') ||
+                     html.includes('Magento_') || html.includes('/media/') ||
+                     /magento.*?\.js/.test(html);
+  
+  // PrestaShop detection
+  const hasPrestaShop = html.includes('prestashop') || html.includes('PrestaShop') ||
+                        html.includes('/themes/') && html.includes('/modules/');
+  
+  // Wix detection
+  const hasWix = html.includes('wix.com') || html.includes('wixstatic.com') ||
+                 html.includes('static.wixstatic.com') || html.includes('wix-code-sdk');
+  
+  // Squarespace detection
+  const hasSquarespace = html.includes('squarespace.com') || html.includes('sqs-') ||
+                         html.includes('Squarespace') || html.includes('squarespace-static');
+  
+  // Webflow detection
+  const hasWebflow = html.includes('webflow.com') || html.includes('webflow.css') || 
+                     html.includes('data-wf-page') || html.includes('data-wf-site');
+  
+  // Framer detection
+  const hasFramer = html.includes('framer.com') || html.includes('framerusercontent.com') ||
+                    html.includes('data-framer-component-type');
+  
+  const hasCMS = hasShopifyContent || hasWordPress || hasDrupal || hasMagento || hasPrestaShop || hasWix || hasSquarespace || hasWebflow || hasFramer;
+  
+  if (hasShopifyContent) {
+    indicators.push('✅ Shopify détecté (CMS e-commerce)');
+  } else if (hasWordPress) {
+    indicators.push('✅ WordPress détecté (CMS)');
+  } else if (hasDrupal) {
+    indicators.push('✅ Drupal détecté (CMS)');
+  } else if (hasMagento) {
+    indicators.push('✅ Magento détecté (CMS e-commerce)');
+  } else if (hasPrestaShop) {
+    indicators.push('✅ PrestaShop détecté (CMS e-commerce)');
+  } else if (hasWix) {
+    indicators.push('✅ Wix détecté (CMS No-code)');
+  } else if (hasSquarespace) {
+    indicators.push('✅ Squarespace détecté (CMS No-code)');
+  } else if (hasWebflow) {
+    indicators.push('✅ Webflow détecté (CMS No-code)');
+  } else if (hasFramer) {
+    indicators.push('✅ Framer détecté (CMS No-code)');
+  }
+  
+  // Framework detection (seulement si pas de CMS)
+  if (!hasCMS) {
+    // Next.js indicators (priorité haute - vérifier en premier si pas de CMS)
+    const hasNextJsData = html.includes('__NEXT_DATA__');
+    const hasNextJsManifest = /\/_next\/static\/[\w\-]+\/_buildManifest\.js/.test(html);
+    const hasNextJsMeta = /<meta[^>]*name=["']next-head["']/.test(html);
+    const hasNextJsDataAttr = /data-next-[^=]*=/.test(html);
+    
+    if (hasNextJsStatic || hasNextJsData || hasNextJsManifest) {
+      indicators.push('✅ Next.js détecté (signatures: /_next/static/, __NEXT_DATA__)');
+      // Next.js utilise React, donc on ne détecte pas React séparément
+    } else {
+      // React indicators (seulement si pas Next.js)
+      const hasReactDevtools = html.includes('__REACT_DEVTOOLS__');
+      const hasReactRoot = /data-reactroot/.test(html);
+      const hasReactScript = /react[.\-]?(dom|dom-client)?[.\-]?\d+\.\d+\.\d+.*?\.js/.test(html) || /\/react[.\-]/.test(html);
+      const hasReactInScript = /<script[^>]*>[\s\S]*?react[\s\S]*?<\/script>/.test(html.toLowerCase());
+      
+      if (hasReactDevtools || hasReactRoot || hasReactScript) {
+        indicators.push('✅ React détecté');
+      } else if (hasReactInScript && html.match(/react-dom|ReactDOM|createElement/i)) {
+        indicators.push('✅ React détecté (dans le code)');
+      }
+    }
+  }
+  
+  // Vue.js indicators (plus précis) - seulement si pas de CMS
+  if (!hasCMS) {
+    const hasVueDirective = /v-(if|for|bind|model|show|hide)/.test(html);
+    const hasVueGlobal = html.includes('__VUE__');
+    const hasVueScript = /vue[.\-]?\d+\.\d+\.\d+.*?\.js/.test(html) || /\/vue\.js/.test(html);
+    
+    if (hasVueDirective || hasVueGlobal || hasVueScript) {
+      indicators.push('✅ Vue.js détecté');
+    }
+  }
+  
+  // Angular indicators (plus précis - éviter les faux positifs avec "ng-" dans les URLs)
+  // Ne pas détecter Angular si on a un CMS ou Next.js
+  if (!hasCMS && !hasNextJsStatic) {
+    const hasNgApp = /ng-app=["']/.test(html);
+    const hasNgController = /ng-controller=["']/.test(html);
+    const hasNgDirective = /ng-(if|for|repeat|switch|include)/.test(html);
+    const hasAngularScript = /angular[.\-]?\d+\.\d+\.\d+.*?\.js/.test(html) || /\/angular\.js/.test(html);
+    const hasAngularModule = /angular\.module\(/.test(html);
+    const hasVueDirective = /v-(if|for|bind|model|show|hide)/.test(html);
+    
+    if (hasNgApp || hasNgController || hasNgDirective || hasAngularModule) {
+      indicators.push('✅ Angular détecté');
+    } else if (hasAngularScript && !hasVueDirective) {
+      indicators.push('✅ Angular détecté (script)');
+    }
+  }
+  
+  // Tailwind CSS indicators (classes utilitaires typiques)
+  const tailwindClasses = /class=["'][^"']*\b(flex|grid|text-(xs|sm|lg|xl)|bg-(slate|gray|blue|red|green|yellow|purple|pink|indigo|emerald)-\d+|p-[0-9]|m-[0-9]|w-(full|screen|auto)|h-(full|screen|auto)|border-|rounded-(sm|md|lg|xl|full)|shadow-)/.test(html);
+  if (tailwindClasses || html.includes('tailwindcss') || html.includes('@tailwind')) {
+    indicators.push('✅ Tailwind CSS détecté');
+  }
+  
+  // jQuery indicators (plus précis)
+  const hasJQuery = /jquery[.\-]?\d+\.\d+\.\d+.*?\.js/i.test(html) || /\/jquery\.(min\.)?js/i.test(html);
+  const hasJQueryInScript = /<script[^>]*>[\s\S]*?\$\s*\(/.test(html) || /jQuery\(/.test(html);
+  
+  if (hasJQuery || (hasJQueryInScript && !hasNextJsStatic)) {
+    indicators.push('✅ jQuery détecté');
+  }
+  
+  // TypeScript indicators (dans les scripts sources)
+  const scriptMatches = html.match(/<script[^>]*src=["']([^"']+)["'][^>]*>/gi) || [];
+  const scriptSources = scriptMatches.map(m => {
+    const srcMatch = m.match(/src=["']([^"']+)["']/);
+    return srcMatch ? srcMatch[1] : '';
+  });
+  if (scriptSources.some(src => /\.tsx?(\?|$)/.test(src) || src.includes('typescript'))) {
+    indicators.push('✅ TypeScript détecté');
+  }
+  
+  // Build tools
+  if (/webpack[.\-]?\d+\.\d+.*?\.js/.test(html) || html.includes('webpackChunkName')) {
+    indicators.push('✅ Webpack détecté');
+  }
+  
+  // Framework CSS
+  if (/bootstrap[.\-]?\d+\.\d+.*?\.css/.test(html) || html.includes('bootstrap.min.css')) {
+    indicators.push('✅ Bootstrap détecté');
+  }
+  if (html.includes('material-ui') || html.includes('mui-') || html.includes('@mui/')) {
+    indicators.push('✅ Material-UI détecté');
+  }
+  
+  return indicators.length > 0 
+    ? `\n\n🔍 INDICATEURS TECHNIQUES DÉTECTÉS DANS LE HTML :\n${indicators.join('\n')}`
+    : '';
+}
+
 async function scrapePage(url: string) {
   try {
     const response = await fetch(url, { 
@@ -202,8 +369,9 @@ export async function POST(request: NextRequest) {
 
     let finalUserContent = userContent;
 
-    // Special handling for legal-analyzer to support URLs with deep scraping
-    if (toolId === 'legal-analyzer' && (userContent.startsWith('http://') || userContent.startsWith('https://'))) {
+    // Special handling for tools that support URLs
+    if ((toolId === 'legal-analyzer' || toolId === 'tech-stack-modernizer') && 
+        (userContent.startsWith('http://') || userContent.startsWith('https://'))) {
       try {
         const homePage = await scrapePage(userContent);
         if (homePage) {
@@ -211,29 +379,40 @@ export async function POST(request: NextRequest) {
           let scrapedUrls = [baseUrl];
           let combinedText = `URL PAGE D'ACCUEIL: ${baseUrl}\n\nCONTENU ACCUEIL:\n${homePage.text.slice(0, 8000)}`;
           
-          // Find and scrape legal pages
-          const legalLinks = findLegalLinks(homePage.html, baseUrl);
-          for (const link of legalLinks) {
-            const page = await scrapePage(link);
-            if (page) {
-              scrapedUrls.push(link);
-              combinedText += `\n\n---\nPAGE LÉGALE TROUVÉE (${link}):\n${page.text.slice(0, 5000)}`;
+          if (toolId === 'legal-analyzer') {
+            // Find and scrape legal pages
+            const legalLinks = findLegalLinks(homePage.html, baseUrl);
+            for (const link of legalLinks) {
+              const page = await scrapePage(link);
+              if (page) {
+                scrapedUrls.push(link);
+                combinedText += `\n\n---\nPAGE LÉGALE TROUVÉE (${link}):\n${page.text.slice(0, 5000)}`;
+              }
             }
+            combinedText = `PAGES ANALYSÉES:\n${scrapedUrls.map(url => `- ${url}`).join('\n')}\n\n${combinedText}`;
+          }
+          
+          if (toolId === 'tech-stack-modernizer') {
+            // Add tech stack detection for modernizer
+            const techIndicators = detectTechStack(homePage.html);
+            combinedText = `PAGES CONSULTÉES:\n${scrapedUrls.map(url => `- ${url}`).join('\n')}\n\n${combinedText}`;
+            combinedText += techIndicators;
           }
 
-          combinedText = `PAGES ANALYSÉES:\n${scrapedUrls.map(url => `- ${url}`).join('\n')}\n\n${combinedText}`;
           finalUserContent = combinedText;
 
-          // Try to find all SIRETs and fetch company data for each
-          const foundSirets = extractSirets(combinedText);
-          if (foundSirets.length > 0) {
-            finalUserContent += `\n\nDONNÉES OFFICIELLES (API GOUV) POUR ${foundSirets.length} NUMÉRO(S) TROUVÉ(S):`;
-            for (const s of foundSirets) {
-              const companyData = await getCompanyData(s);
-              if (companyData) {
-                finalUserContent += `\n\n- NUMÉRO ${s}:\n${JSON.stringify(companyData, null, 2)}`;
-              } else {
-                finalUserContent += `\n\n- NUMÉRO ${s}: NON TROUVÉ DANS L'API GOUV`;
+          if (toolId === 'legal-analyzer') {
+            // Try to find all SIRETs and fetch company data for each
+            const foundSirets = extractSirets(combinedText);
+            if (foundSirets.length > 0) {
+              finalUserContent += `\n\nDONNÉES OFFICIELLES (API GOUV) POUR ${foundSirets.length} NUMÉRO(S) TROUVÉ(S):`;
+              for (const s of foundSirets) {
+                const companyData = await getCompanyData(s);
+                if (companyData) {
+                  finalUserContent += `\n\n- NUMÉRO ${s}:\n${JSON.stringify(companyData, null, 2)}`;
+                } else {
+                  finalUserContent += `\n\n- NUMÉRO ${s}: NON TROUVÉ DANS L'API GOUV`;
+                }
               }
             }
           }
@@ -290,6 +469,7 @@ export async function POST(request: NextRequest) {
         ],
         temperature: 0.1,
         max_tokens: 2000,
+        stream: true, // Enable streaming
       };
     } else if (provider === 'mistral') {
       // Map to actual Mistral model names
@@ -320,6 +500,7 @@ export async function POST(request: NextRequest) {
         ],
         temperature: 0.1,
         max_tokens: 2000,
+        stream: true, // Enable streaming
       };
     } else {
       return NextResponse.json(
@@ -343,17 +524,62 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const data = await response.json();
-    const aiResponse = data.choices[0]?.message?.content;
+    // Create a new stream that decodes the OpenAI/Mistral stream format
+    const stream = new ReadableStream({
+      async start(controller) {
+        const reader = response.body?.getReader();
+        if (!reader) {
+          controller.close();
+          return;
+        }
 
-    if (!aiResponse) {
-      return NextResponse.json(
-        { error: 'No response from AI' },
-        { status: 500 }
-      );
-    }
+        const decoder = new TextDecoder();
+        let buffer = '';
 
-    return NextResponse.json({ response: aiResponse });
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            
+            // Keep the last partial line in the buffer
+            buffer = lines.pop() || '';
+
+            for (const line of lines) {
+              const trimmedLine = line.trim();
+              if (!trimmedLine || trimmedLine === 'data: [DONE]') continue;
+              
+              if (trimmedLine.startsWith('data: ')) {
+                try {
+                  const data = JSON.parse(trimmedLine.slice(6));
+                  const content = data.choices[0]?.delta?.content || '';
+                  if (content) {
+                    controller.enqueue(new TextEncoder().encode(content));
+                  }
+                } catch (e) {
+                  console.error('Error parsing stream line:', trimmedLine, e);
+                }
+              }
+            }
+          }
+        } catch (err) {
+          console.error('Stream error:', err);
+          controller.error(err);
+        } finally {
+          controller.close();
+        }
+      },
+    });
+
+    return new Response(stream, {
+      headers: {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+      },
+    });
 
   } catch (error) {
     console.error('API route error:', error);

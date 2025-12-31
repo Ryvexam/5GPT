@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Code2,
-  Container,
   Search,
   FileText,
   ShieldCheck,
@@ -14,7 +13,8 @@ import {
   ChevronRight,
   ArrowUpRight,
   Sparkles,
-  BookOpen
+  BookOpen,
+  ListTodo
 } from 'lucide-react';
 
 const ToolCard = ({ tool, onClick, className = "" }: { tool: any; onClick: () => void; className?: string }) => (
@@ -116,6 +116,7 @@ const App = () => {
       id: 'technical-documentation',
       name: "Documentation Technique",
       category: "Admin",
+      path: "/docs",
       description: "Découvre notre processus : pourquoi ces outils, l'analyse de nos techniques de Prompt Engineering et les choix des modèles IA.",
       icon: BookOpen,
       iconBg: "from-indigo-50 to-violet-50",
@@ -132,29 +133,20 @@ const App = () => {
       iconColor: "text-rose-600"
     },
     {
-      id: 'unit-test-generator',
-      name: "Unit Test Generator",
+      id: 'tech-stack-modernizer',
+      name: "Tech Stack Modernizer",
       category: "Code",
-      description: "Generate comprehensive unit tests automatically using AI pattern matching for high coverage.",
+      description: "Analyse ta stack actuelle et suggère un plan de migration moderne vers les meilleures technologies actuelles (Next.js, Tailwind, etc.).",
       icon: Code2,
       iconBg: "from-blue-50 to-indigo-50",
       iconColor: "text-indigo-600"
     },
     {
-      id: 'smart-dockerizer',
-      name: "Smart Dockerizer",
-      category: "DevOps",
-      description: "Instant Dockerfile creation with intelligent layer caching optimization strategies.",
-      icon: Container,
-      iconBg: "from-sky-50 to-cyan-50",
-      iconColor: "text-cyan-600"
-    },
-    {
-      id: 'log-deep-analyzer',
-      name: "Log Deep Analyzer",
-      category: "Debug",
-      description: "Parse gigabytes of logs in seconds to identify anomalies and root causes visually.",
-      icon: Search,
+      id: 'feature-architect',
+      name: "Feature Smith & Estimator",
+      category: "Conception",
+      description: "Transforme une idée floue en spécifications techniques blindées : User Stories, impacts DB/API et estimation de complexité.",
+      icon: ListTodo,
       iconBg: "from-amber-50 to-orange-50",
       iconColor: "text-amber-600"
     },
@@ -206,7 +198,7 @@ const App = () => {
                     key={idx}
                     icon={tool.icon}
                     label={tool.name}
-                    onClick={() => router.push(`/tools/${tool.id}`)}
+                    onClick={() => router.push(tool.path || `/tools/${tool.id}`)}
                   />
                 ))}
               </div>
@@ -257,7 +249,7 @@ const App = () => {
               <ToolCard
                 key={index}
                 tool={tool}
-                onClick={() => router.push(`/tools/${tool.id}`)}
+                onClick={() => router.push(tool.path || `/tools/${tool.id}`)}
                 className={tool.fullWidth ? "sm:col-span-2 lg:col-span-3" : ""}
               />
             ))}
