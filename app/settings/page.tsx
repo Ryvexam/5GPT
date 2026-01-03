@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  ArrowLeft,
   Settings as SettingsIcon,
   Key,
   Cpu,
@@ -159,33 +158,18 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="border-b border-slate-200 bg-white/80 backdrop-blur-sm">
-        <div className="max-w-4xl mx-auto px-6 py-4">
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => router.push('/')}
-              className="p-2 rounded-lg hover:bg-slate-100 transition-colors"
-            >
-              <ArrowLeft size={20} />
-            </button>
-            <div className="flex items-center space-x-3">
-              <div className="p-2 rounded-lg bg-slate-600">
-                <SettingsIcon size={24} className="text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold">Settings</h1>
-                <p className="text-sm text-slate-600">Configure your AI provider and preferences</p>
-              </div>
-            </div>
-          </div>
+    <div className="p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
+      <div className="flex items-center space-x-3 mb-8">
+        <div className="p-2 rounded-lg bg-emerald-600/10">
+          <SettingsIcon size={24} className="text-emerald-600" />
+        </div>
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">Settings</h1>
+          <p className="text-sm text-slate-500">Configure your AI provider and preferences</p>
         </div>
       </div>
 
-      {/* Content */}
-      <div className="max-w-4xl mx-auto px-6 py-8">
-        <div className="space-y-8">
+      <div className="space-y-8">
 
           {/* Current Configuration */}
           <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
@@ -359,9 +343,7 @@ export default function SettingsPage() {
               )}
             </button>
           </div>
-        </div>
       </div>
     </div>
   );
 }
-

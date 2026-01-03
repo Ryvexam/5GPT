@@ -44,7 +44,7 @@ async function exploitSiretDdos() {
     </body></html>
   `;
   
-  // Requête à 5GPT
+  // Requête à ToolsWithAI
   const response = await fetch('https://5gpt.com/api/generate', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

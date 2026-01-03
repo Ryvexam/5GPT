@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 const SYSTEM_PROMPTS = {
   'tech-stack-modernizer': "Tu es un expert en architecture logicielle et modernisation de stack (Legacy to Modern). Ton rôle est d'analyser une stack technique et de proposer une stratégie de modernisation.\n\nVoici des exemples de modernisation (Few-shot) :\n- Legacy : jQuery + PHP direct -> Modern : Next.js + API Routes + Tailwind\n- Legacy : CSS local/inline -> Modern : Tailwind CSS ou CSS Modules\n- Legacy : REST API simple -> Modern : GraphQL ou tRPC avec validation Zod\n\nATTENTION : Si on te fournit des INDICATEURS TECHNIQUES DÉTECTÉS (issus de l'analyse du HTML), utilise-les en PRIORITÉ pour identifier la stack actuelle. Ces indicateurs sont plus fiables que le contenu texte seul.\n\nGÉNÈRE UN RAPPORT STRUCTURÉ EN MARKDOWN avec les sections suivantes (formatage adapté pour PDF) :\n\n# RAPPORT D'ANALYSE TECH STACK\n\n## 1. 🔗 PAGES CONSULTÉES\n\nSi des pages ont été analysées (URL fournie), liste-les ici :\n- [URL de la page analysée]\n\n## 2. 📊 STACK ACTUELLE DÉTECTÉE\n\nPrésente la stack sous forme de tableau Markdown :\n\n| Composant | Technologie Détectée | Version/Note |\n| :--- | :--- | :--- |\n| Framework Frontend | ... | ... |\n| Langage | ... | ... |\n| CSS Framework | ... | ... |\n| Build Tool | ... | ... |\n| Autres | ... | ... |\n\n## 3. ⚖️ VERDICT\n\n**IMPORTANT - CAS D'UNE STACK MODERNE :**\nSi la stack détectée est déjà moderne (Next.js, React moderne, Vue 3, Angular moderne, Tailwind CSS, TypeScript, etc.), alors :\n- ✅ **VERDICT : STACK MODERNE - VALIDÉE ✅**\n- Indique clairement que la stack est à jour et moderne\n\n**CAS D'UNE STACK LEGACY :**\nSi la stack détectée est legacy (jQuery, PHP direct, CSS inline, etc.), alors :\n- ⚠️ **VERDICT : STACK LEGACY - MIGRATION RECOMMANDÉE**\n- Indique clairement que la stack nécessite une modernisation\n\n## 4. 🎯 CIBLE MODERNE (UNIQUEMENT SI STACK LEGACY)\n\nSi stack legacy, présente le tableau de migration :\n\n| Composant Actuel | Technologie Recommandée (2026) | Raison |\n| :--- | :--- | :--- |\n| ... | ... | ... |\n\n**N'UTILISE PAS CETTE SECTION SI LA STACK EST MODERNE.**\n\n## 5. 📋 PLAN DE MIGRATION (UNIQUEMENT SI STACK LEGACY)\n\nSi stack legacy, utilise la méthode 'Chain of Thought' pour détailler les étapes :\n\n### Phase 1 : Préparation\n- ...\n\n### Phase 2 : Migration Progressive\n- ...\n\n### Phase 3 : Tests & Validation\n- ...\n\n**N'UTILISE PAS CETTE SECTION SI LA STACK EST MODERNE.**\n\n## 6. 💡 RECOMMANDATIONS\n\n**SI STACK MODERNE :**\n- Liste des optimisations mineures possibles (performance, DX, SEO, etc.)\n- Ou indique 'Stack optimale, aucune action requise'\n\n**SI STACK LEGACY :**\n- Gains attendus : Performance, DX (Developer Experience), SEO, Sécurité\n- Priorités et risques à considérer\n\n## 7. 📈 RÉSUMÉ EXÉCUTIF\n\nUn paragraphe concis résumant l'analyse et les recommandations.\n\n---\n\n**FORMATAGE :** Utilise des emojis, des tableaux Markdown, des listes à puces, et des sections bien structurées. Le rapport doit être lisible et professionnel pour une impression PDF.",
   'feature-architect': "Tu es un Lead Tech Senior et Product Manager expérimenté. Ton objectif est de sécuriser le développement en pensant à tout ce que le développeur a pu oublier.\n\nAnalyse la demande et produis un document de spécification technique complet en Markdown :\n\n# 🏗 SPÉCIFICATION : [Nom de la feature]\n\n## 1. 📝 USER STORIES & SCÉNARIOS\nUtilise le format Gherkin (Given/When/Then) pour :\n- Le Happy Path (cas nominal)\n- Les Edge Cases (erreurs, réseau coupé, droits manquants...)\n\n## 2. ⚙️ ANALYSE D'IMPACT (HIDDEN WORK)\nListe exhaustive des impacts techniques :\n- **Base de données** : Schéma, migrations nécessaires ?\n- **API / Backend** : Nouveaux endpoints, validation, sécurité ?\n- **Frontend** : Nouveaux états, composants, gestion d'erreurs ?\n- **Tiers** : Emails transactionnels, webhooks, jobs asynchrones ?\n\n## 3. 🛡 SÉCURITÉ & PERFORMANCE\nPoints de vigilance spécifiques (ex: Rate limiting, Injection, N+1 queries).\n\n## 4. ⏱ ESTIMATION & DÉCOUPAGE\nDécoupe en tâches techniques atomiques (< 4h) et estime la complexité globale (T-Shirt Sizing : XS/S/M/L/XL) avec une justification.",
-  'readme-architect': "Tu es un Technical Writer. Rédige un fichier README.md professionnel à partir de ce code ou de cette description. Inclus : Titre, Badges, Installation, Usage, et Contribution. Sois clair et concis.",
+  'readme-architect': "Tu es un expert Technical Writer et Developer Advocate. Ton objectif est de créer un `README.md` complet, professionnel et visuellement attrayant pour un projet logiciel.\n\nTu recevras un résumé de la structure des fichiers et le contenu des fichiers clés (comme package.json, README existant, fichiers de config et code source).\n\nAnalyse ces informations pour comprendre :\n1. **Ce que fait le projet** (Proposition de valeur).\n2. **La Stack Technique** (Frameworks, librairies, outils).\n3. **Comment l'installer et le lancer**.\n4. **Les fonctionnalités clés**.\n\nGénère un `README.md` au format Markdown (en Anglais par défaut, sauf si le code est clairement francophone) qui inclut :\n- **Titre du Projet** & **Description** (Clair et accrocheur).\n- **Badges** (Tech stack, licence, statut).\n- **Fonctionnalités** (Liste à puces).\n- **Tech Stack** (Icônes/Badges préférés).\n- **Getting Started / Installation** (Commandes étape par étape).\n- **Usage** (Comment utiliser l'app).\n- **Structure du Projet** (Optionnel, si utile).\n- **Contributing** (Guidelines).\n- **Licence**.\n\nUtilise des emojis pour rendre le tout engageant. Formate correctement les blocs de code.",
   'legal-analyzer': "Tu es un expert en droit numérique, RGPD et conformité web (expertises LCEN et RGPD). Ton rôle est d'analyser une entité à travers son site web.\n\nOn t'a fourni le contenu de la page d'accueil ET potentiellement des pages légales trouvées (Mentions Légales, CGU, CGV, Politique de Confidentialité).\n\nAnalyse l'ensemble et génère un RAPPORT DE CONFORMITÉ STRUCTURÉ :\n\n1. 🔗 PAGES ANALYSÉES : Liste les URLs que tu as analysées (elles sont fournies au début du contexte sous 'PAGES ANALYSÉES').\n\n2. 🚩 RAPPEL DES RISQUES : Un court paragraphe percutant sur les risques (amendes, sanctions pénales) liés au non-respect de la LCEN et du RGPD.\n\n3. 📊 IDENTIFICATION DE L'ENTITÉ : Présente les informations suivantes UNIQUEMENT sous forme d'un tableau Markdown.\n\n| Champ | Valeur |\n| :--- | :--- |\n| Nom de l'entreprise / Entité | ... |\n| SIRET / Siren | (Liste tous les numéros trouvés ou 'Non requis (Portfolio personnel)') |\n| Responsable de publication | ... |\n| Hébergeur | ... |\n| Localisation serveur | ... |\n| Contact | ... |\n\n4. 🏢 ANALYSE DE L'ACTIVITÉ :\n   - **Type de site** : Détermine s'il s'agit d'un site professionnel (commercial, agence, service payant) ou d'un site non-professionnel (portfolio étudiant, blog personnel, projet open-source sans but lucratif).\n   - **Activité déduite du site** : Décris brièvement l'activité identifiée.\n   - **Activité officielle (API GOUV)** : Analyse CHAQUE SIRET/SIREN trouvé et indique son activité officielle. Si aucun n'est trouvé, indique-le.\n   - **Verdict de cohérence** : Compare l'activité réelle et les objets sociaux trouvés.\n     - Si c'est un portfolio personnel/étudiant : Précise que le SIRET n'est pas requis.\n     - Si c'est un site commercial SANS SIRET : Signale le manquement comme non-conforme.\n     - Si les activités sont totalement opposées (ex: vente de thé vs informatique) : Indique '🚨 POSSIBLE FRAUDE OU ACTIVITÉ ILLÉGALE'.\n   - **Risques associés** : Liste les risques spécifiques si nécessaire.\n   - **Note sur le SIRET** : Rappelle la règle (Requis pour toute vente/service pro, Non requis pour usage personnel).\n\n5. 🔍 AUDIT DES DOCUMENTS : Analyse les contenus extraits et indique 'PRÉSENT ✅' ou 'ABSENT ❌' :\n   - **Mentions Légales**\n   - **CGU**\n   - **CGV** (indispensable si site marchand)\n   - **Politique de Confidentialité / RGPD**\n   - **Gestion des Cookies**\n\n6. ⚠️ CLAUSES & MANQUEMENTS : Liste les points de non-conformité.\n\n7. ⚖️ VERDICT FINAL : 'CONFORME ✅', 'PARTIELLEMENT CONFORME ⚠️' ou 'NON CONFORME ❌'.\n\nIMPORTANT : Ne sois pas agressif sur la fraude pour un simple portfolio. Si c'est un portfolio sans vente de service direct, le verdict peut être CONFORME même sans SIRET si l'hébergeur est mentionné."
 };
 
@@ -144,6 +144,99 @@ function findLegalLinks(html: string, baseUrl: string): string[] {
     .sort((a, b) => b.score - a.score)
     .slice(0, 5)
     .map(l => l.url);
+}
+
+async function fetchGithubRepo(url: string) {
+  try {
+    // Extract owner/repo
+    const match = url.match(/github\.com\/([^\/]+)\/([^\/]+)/);
+    if (!match) return null;
+    const owner = match[1];
+    const repo = match[2];
+
+    // Get default branch
+    const repoRes = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
+    if (!repoRes.ok) return null;
+    const repoData = await repoRes.json();
+    const branch = repoData.default_branch;
+
+    // Get file tree
+    const treeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`);
+    if (!treeRes.ok) return null;
+    const treeData = await treeRes.json();
+
+    // Priority files to fetch
+    const priorityFiles = [
+      'package.json', 'composer.json', 'requirements.txt', 'Gemfile', 'Cargo.toml', 'go.mod', // Deps
+      'README.md', 'README.txt', // Docs
+      'next.config.js', 'next.config.ts', 'tsconfig.json', 'vite.config.ts', 'webpack.config.js', // Config
+      'Dockerfile', 'docker-compose.yml' // Infra
+    ];
+
+    // Select files to fetch
+    let filesToFetch: any[] = [];
+    
+    // 1. Priority files
+    if (treeData.tree) {
+      filesToFetch = treeData.tree
+        .filter((f: any) => priorityFiles.includes(f.path.split('/').pop() || ''))
+        .slice(0, 5); // Limit priority files
+
+      // 2. Some source files (heuristic: src/ or app/ folder, .ts/.js/.py/.go, not too deep)
+      const sourceFiles = treeData.tree
+        .filter((f: any) => 
+          (f.path.endsWith('.ts') || f.path.endsWith('.tsx') || f.path.endsWith('.js') || f.path.endsWith('.jsx') || f.path.endsWith('.py') || f.path.endsWith('.go') || f.path.endsWith('.rb') || f.path.endsWith('.php')) &&
+          !f.path.includes('node_modules') && 
+          !f.path.includes('test') &&
+          !f.path.includes('.d.ts') &&
+          f.type === 'blob' &&
+          f.size < 20000 // Skip large files
+        )
+        .slice(0, 5); // Take 5 random source files
+
+      filesToFetch = [...filesToFetch, ...sourceFiles];
+    }
+
+    // Fetch content
+    let combinedContent = `GITHUB REPOSITORY: ${owner}/${repo}\n\nFILE STRUCTURE (Top 50):\n`;
+    
+    // List structure
+    if (treeData.tree) {
+        combinedContent += treeData.tree
+        .filter((f: any) => f.type === 'blob')
+        .slice(0, 50)
+        .map((f: any) => `- ${f.path}`)
+        .join('\n');
+    }
+    
+    combinedContent += '\n\nFILE CONTENTS:\n';
+
+    await Promise.all(filesToFetch.map(async (file: any) => {
+      try {
+        const contentRes = await fetch(file.url); // GitHub API Blob URL
+        if (contentRes.ok) {
+          const contentData = await contentRes.json();
+          // Content is base64 encoded
+          if (contentData.content) {
+             // atob might not be available in all edge runtimes, but Node environment usually has Buffer
+             // However, next.js edge might rely on atob. 
+             // Safest is Buffer for Node, atob for browser/edge. 
+             // Let's try Buffer first as this runs on server.
+             const content = Buffer.from(contentData.content, 'base64').toString('utf-8');
+             combinedContent += `\n--- FILE: ${file.path} ---\n${content.slice(0, 5000)}\n`; 
+          }
+        }
+      } catch (e) {
+        console.error(`Error fetching ${file.path}`, e);
+      }
+    }));
+
+    return combinedContent;
+
+  } catch (e) {
+    console.error('Error fetching GitHub repo:', e);
+    return null;
+  }
 }
 
 function detectTechStack(html: string): string {
@@ -370,7 +463,12 @@ export async function POST(request: NextRequest) {
     let finalUserContent = userContent;
 
     // Special handling for tools that support URLs
-    if ((toolId === 'legal-analyzer' || toolId === 'tech-stack-modernizer') && 
+    if (toolId === 'readme-architect' && userContent.includes('github.com') && (userContent.startsWith('http://') || userContent.startsWith('https://'))) {
+      const repoContent = await fetchGithubRepo(userContent);
+      if (repoContent) {
+        finalUserContent = repoContent;
+      }
+    } else if ((toolId === 'legal-analyzer' || toolId === 'tech-stack-modernizer') && 
         (userContent.startsWith('http://') || userContent.startsWith('https://'))) {
       try {
         const homePage = await scrapePage(userContent);
@@ -404,14 +502,30 @@ export async function POST(request: NextRequest) {
           if (toolId === 'legal-analyzer') {
             // Try to find all SIRETs and fetch company data for each
             const foundSirets = extractSirets(combinedText);
-            if (foundSirets.length > 0) {
-              finalUserContent += `\n\nDONNÉES OFFICIELLES (API GOUV) POUR ${foundSirets.length} NUMÉRO(S) TROUVÉ(S):`;
-              for (const s of foundSirets) {
+            
+            // Liste des hébergeurs et tiers à ignorer
+            const IGNORED_HOSTS = ['OVH', 'IONOS', 'AMAZON', 'HETZNER', 'O2SWITCH', 'SHOPIFY', 'GANDI', 'PLANETHOSTER', 'VERCEL', 'NETLIFY', 'GOOGLE', 'MICROSOFT', 'HOSTINGER', 'CLOUDFLARE'];
+            
+            let keptSirets = 0;
+            // On scanne jusqu'à 6 candidats pour en trouver 3 pertinents (non-hébergeurs)
+            const candidates = foundSirets.slice(0, 6);
+
+            if (candidates.length > 0) {
+              finalUserContent += `\n\nDONNÉES OFFICIELLES (API GOUV) - FILTRÉES (Max 3 pertinents) :`;
+              
+              for (const s of candidates) {
+                if (keptSirets >= 3) break;
+
                 const companyData = await getCompanyData(s);
                 if (companyData) {
-                  finalUserContent += `\n\n- NUMÉRO ${s}:\n${JSON.stringify(companyData, null, 2)}`;
-                } else {
-                  finalUserContent += `\n\n- NUMÉRO ${s}: NON TROUVÉ DANS L'API GOUV`;
+                  const nameUpper = (companyData.nom || '').toUpperCase();
+                  // Vérifier si c'est un hébergeur connu
+                  const isHost = IGNORED_HOSTS.some(host => nameUpper.includes(host));
+
+                  if (!isHost) {
+                    finalUserContent += `\n\n- NUMÉRO ${s}:\n${JSON.stringify(companyData, null, 2)}`;
+                    keptSirets++;
+                  }
                 }
               }
             }

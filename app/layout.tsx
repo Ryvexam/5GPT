@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import MainLayout from "./components/MainLayout";
 
 export const metadata: Metadata = {
-  title: "DevSuite | Developer Tools Dashboard",
+  title: "ToolsWithAI | Developer Tools Dashboard",
   description: "Efficient developer tooling with AI-powered automation for code generation, testing, and productivity.",
 };
 
@@ -14,7 +15,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        {children}
+        <MainLayout>
+          {children}
+        </MainLayout>
       </body>
     </html>
   );

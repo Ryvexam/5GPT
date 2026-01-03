@@ -65,7 +65,7 @@ const TOOLS_CONFIG = {
     name: 'README Architect',
     description: 'Craft beautiful, structured documentation and READMEs that engage developers instantly.',
     icon: FileText,
-    placeholder: 'Describe your project or paste code snippets...',
+    placeholder: 'Paste a GitHub repository URL (e.g., https://github.com/owner/repo) or describe your project...',
     category: 'Documentation'
   },
   'legal-analyzer': {
@@ -108,7 +108,26 @@ const SpecRenderer = ({ content }: { content: string }) => {
           th: ({node, ...props}) => <th className="px-6 py-3 border-b border-slate-200" {...props} />,
           td: ({node, ...props}) => <td className="px-6 py-4 border-b border-slate-100" {...props} />,
           blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-amber-500 pl-4 py-2 italic text-slate-500 bg-slate-50 rounded-r-lg my-4" {...props} />,
-          code: ({node, ...props}) => <code className="bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded text-xs font-mono border border-slate-200" {...props} />,
+          pre: ({children}) => <>{children}</>,
+          code: ({node, inline, className, children, ...props}: any) => {
+            return !inline 
+              ? <div className="not-prose relative my-8 overflow-hidden rounded-2xl border border-slate-800 shadow-xl">
+                  <div className="flex items-center justify-between px-4 py-2 bg-[#161b22] border-b border-slate-800">
+                    <div className="flex gap-1.5">
+                      <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]"></div>
+                      <div className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]"></div>
+                      <div className="w-2.5 h-2.5 rounded-full bg-[#27c93f]"></div>
+                    </div>
+                    <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Gherkin Spec</span>
+                  </div>
+                  <code className="relative block bg-[#0d1117] text-[#e6edf3] p-6 text-[13px] font-mono overflow-x-auto whitespace-pre leading-relaxed" {...props}>
+                    {children}
+                  </code>
+                </div>
+              : <code className="bg-amber-50 text-amber-700 px-1.5 py-0.5 rounded-md text-[12px] font-mono border border-amber-100 font-bold" {...props}>
+                  {children}
+                </code>
+          },
         }}
       >
         {content}
@@ -321,7 +340,7 @@ export default function ToolPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 pb-12">
+    <div className="text-slate-800 pb-12">
       <style jsx global>{`
         @media print {
           .no-print { display: none !important; }
@@ -399,6 +418,21 @@ export default function ToolPage() {
               <h3 className="text-sm font-bold text-rose-900 uppercase tracking-wide">Avertissement de Conformité Web</h3>
               <p className="text-sm text-rose-700 mt-1">
                 Le non-respect de la <strong>LCEN</strong> ou du <strong>RGPD</strong> peut entraîner des sanctions allant jusqu\'à <strong>20 millions d\'euros</strong>. Notre IA vérifie désormais la correspondance entre votre SIRET et votre activité réelle via l\'API Recherche d\'entreprises.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* README Architect Warning Banner */}
+        {toolId === 'readme-architect' && (
+          <div className="mb-8 bg-blue-50 border border-blue-100 rounded-2xl p-4 flex items-start space-x-4 no-print">
+            <div className="p-2 bg-blue-100 rounded-xl text-blue-600">
+              <AlertTriangle size={20} />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-blue-900 uppercase tracking-wide">Usage de README Architect</h3>
+              <p className="text-sm text-blue-700 mt-1">
+                Cet outil fonctionne uniquement sur les <strong>dépôts GitHub publics</strong>. Pour les projets de très grande taille, l\'analyse peut être partielle en raison des limites de fenêtre de contexte de l\'IA.
               </p>
             </div>
           </div>
@@ -514,11 +548,40 @@ export default function ToolPage() {
 
             <div className="bg-white border border-slate-200 rounded-[2rem] min-h-[500px] shadow-sm overflow-hidden report-container relative">
               {output ? (
-                <div className={`p-8 ${isFeatureArchitect ? '' : `prose ${themeProse} max-w-none prose-headings:font-bold prose-p:text-slate-600 prose-table:border prose-table:rounded-xl prose-th:bg-slate-50 prose-th:p-3 prose-td:p-3 prose-pre:bg-slate-900 ${themePre}`}`}>
+                <div className={`p-8 ${isFeatureArchitect ? '' : `prose ${themeProse} max-w-none prose-headings:font-bold prose-p:text-slate-600 prose-table:border prose-table:rounded-xl prose-th:bg-slate-50 prose-th:p-3 prose-td:p-3 prose-pre:p-0 prose-pre:bg-transparent ${themePre}`}`}>
                   {isFeatureArchitect ? (
                     <SpecRenderer content={output} />
                   ) : (
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{output}</ReactMarkdown>
+                    <ReactMarkdown 
+                      remarkPlugins={[remarkGfm]}
+                      components={{
+                        pre: ({children}) => <>{children}</>,
+                        code: ({node, inline, className, children, ...props}: any) => {
+                          const match = /language-(\w+)/.exec(className || '');
+                          return !inline 
+                            ? <div className="not-prose relative my-8 overflow-hidden rounded-2xl border border-slate-800 shadow-xl">
+                                <div className="flex items-center justify-between px-4 py-2 bg-[#161b22] border-b border-slate-800">
+                                  <div className="flex gap-1.5">
+                                    <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]"></div>
+                                    <div className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]"></div>
+                                    <div className="w-2.5 h-2.5 rounded-full bg-[#27c93f]"></div>
+                                  </div>
+                                  <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+                                    {match ? match[1].toUpperCase() : 'PREVIEW'}
+                                  </span>
+                                </div>
+                                <code className="relative block bg-[#0d1117] text-[#e6edf3] p-6 text-[13px] font-mono overflow-x-auto whitespace-pre leading-relaxed" {...props}>
+                                  {children}
+                                </code>
+                              </div>
+                            : <code className="bg-slate-100 text-emerald-700 px-1.5 py-0.5 rounded-md text-[12px] font-mono border border-slate-200 font-bold" {...props}>
+                                {children}
+                              </code>
+                        }
+                      }}
+                    >
+                      {output}
+                    </ReactMarkdown>
                   )}
                 </div>
               ) : (
@@ -538,7 +601,7 @@ export default function ToolPage() {
 
               {/* Print Footer */}
               <div className="print-only mt-12 pt-8 border-t border-slate-100 text-[10px] text-slate-400 font-mono flex justify-between uppercase tracking-widest">
-                <span>Certifié par DevSuite AI Analyzer</span>
+                <span>Certifié par ToolsWithAI Analyzer</span>
                 <span>Page 1 / 1</span>
               </div>
             </div>
