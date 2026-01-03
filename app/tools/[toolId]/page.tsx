@@ -14,7 +14,9 @@ import {
   Check,
   AlertTriangle,
   Printer,
-  ListTodo
+  ListTodo,
+  Mic,
+  Square
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -123,8 +125,11 @@ export default function ToolPage() {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
   const [copied, setCopied] = useState(false);
   const [config, setConfig] = useState<any>(null);
+  
+  const mediaRecorderRef = React.useRef<MediaRecorder | null>(null);
 
   const tool = TOOLS_CONFIG[toolId as keyof typeof TOOLS_CONFIG];
 
@@ -181,6 +186,60 @@ export default function ToolPage() {
       </div>
     );
   }
+
+  const startRecording = async () => {
+    if (!config) return;
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      const audioChunks: BlobPart[] = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        audioChunks.push(event.data);
+      };
+
+      mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+        setIsRecording(false);
+        
+        const formData = new FormData();
+        formData.append('file', audioBlob);
+        formData.append('provider', config.provider);
+        formData.append('apiKey', config.apiKey);
+
+        try {
+          const response = await fetch('/api/transcribe', {
+            method: 'POST',
+            body: formData,
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            setInput((prev) => prev + (prev ? ' ' : '') + data.text);
+          } else {
+            console.error('Transcription failed');
+          }
+        } catch (err) {
+          console.error('Transcription error', err);
+        }
+        
+        stream.getTracks().forEach(track => track.stop());
+      };
+
+      mediaRecorder.start();
+      setIsRecording(true);
+    } catch (err) {
+      console.error('Error accessing microphone', err);
+      alert('Impossible d\'accéder au microphone');
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+    }
+  };
 
   const handleGenerate = async () => {
     if (!input.trim() || !config) return;
@@ -355,12 +414,27 @@ export default function ToolPage() {
               </h2>
               
               <div className="space-y-4">
-                <textarea
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder={tool.placeholder}
-                  className={`w-full ${toolId === 'legal-analyzer' ? 'h-14 py-4 overflow-hidden' : 'h-96 py-4'} px-4 bg-slate-50 border border-slate-200 rounded-2xl resize-none focus:ring-2 ${themeRing} focus:border-transparent outline-none text-slate-800 placeholder-slate-400 transition-all duration-300 font-mono text-sm`}
-                />
+                <div className="relative">
+                  <textarea
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    placeholder={tool.placeholder}
+                    className={`w-full ${toolId === 'legal-analyzer' ? 'h-14 py-4 overflow-hidden' : 'h-96 py-4'} px-4 bg-slate-50 border border-slate-200 rounded-2xl resize-none focus:ring-2 ${themeRing} focus:border-transparent outline-none text-slate-800 placeholder-slate-400 transition-all duration-300 font-mono text-sm`}
+                  />
+                  {(toolId === 'readme-architect' || toolId === 'feature-architect') && (
+                    <button
+                      onClick={isRecording ? stopRecording : startRecording}
+                      className={`absolute bottom-3 right-3 p-2 rounded-full transition-all duration-200 ${
+                        isRecording 
+                          ? 'bg-red-500 text-white animate-pulse shadow-lg shadow-red-200' 
+                          : 'bg-slate-100 text-slate-400 hover:bg-slate-200'
+                      }`}
+                      title={isRecording ? "Arrêter l'enregistrement" : "Dicter avec IA"}
+                    >
+                      {isRecording ? <Square size={16} fill="currentColor" /> : <Mic size={18} />}
+                    </button>
+                  )}
+                </div>
 
                 <button
                   onClick={handleGenerate}

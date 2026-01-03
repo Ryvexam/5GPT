@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 5GPT - AI-Powered Developer Toolkit
 
-## Getting Started
+[![Next.js](https://img.shields.io/badge/Next.js-16.0.10-black?logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.2.1-blue?logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4-06B6D4?logo=tailwindcss)](https://tailwindcss.com/)
+[![License](https://img.shields.io/badge/License-MIT-green)]()
 
-First, run the development server:
+> **5GPT** est une suite d'outils de développement augmentés par l'IA, conçue pour automatiser et accélérer les tâches courantes des développeurs et administrateurs système.
+
+## 🎯 Vue d'ensemble
+
+**5GPT** propose 7 outils intelligents qui utilisent les meilleurs modèles IA (OpenAI GPT-5, Mistral Large) pour transformer vos workflows:
+
+| Outil | Catégorie | Description |
+|-------|-----------|-------------|
+| **Is the website compliant?** | Légal | Audit RGPD/LCEN + vérification SIRET |
+| **Tech Stack Modernizer** | Code | Plan de migration vers technologies modernes |
+| **Smart Dockerizer** | DevOps | Dockerfiles optimisés production-ready |
+| **JSON to Zod** | Productivité | JSON → schémas Zod + interfaces TypeScript |
+| **Feature Smith & Estimator** | Conception | Idées floues → spécifications techniques |
+| **README Architect** | Documentation | Documentations professionnelles |
+| **Documentation Technique** | Admin | Audit projet & processus d'ingénierie des prompts |
+
+---
+
+## 🚀 Démarrage rapide
+
+### Prérequis
+- **Node.js** 18+ ou **Bun**
+- Clé API **OpenAI** OU **Mistral AI**
+
+### Installation
 
 ```bash
+git clone https://github.com/yourusername/5gpt.git
+cd 5gpt
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Ouvrez http://localhost:3000 et configurez votre provider IA.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📚 Documentation
 
-## Learn More
+- **[Analyse Complète de Sécurité](docs/SECURITY.md)** - Risques de prompt injection + tests
+- **[Architecture & API](docs/API.md)** - Endpoints et intégrations
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔐 Sécurité
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+✅ Validation inputs  
+✅ XSS prevention (HTML stripping)  
+✅ LLM robustness (GPT-5, Mistral)  
+⚠️ Rate limiting recommandé en production  
 
-## Deploy on Vercel
+**[Voir rapport de sécurité complet](docs/SECURITY.md)**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📦 Déploiement
+
+### Vercel (Recommandé)
+```bash
+vercel
+```
+
+### Self-hosted
+```bash
+npm run build
+npm start
+```
+
+---
+
+## 🎓 Techniques de Prompt Engineering
+
+| Outil | Technique |
+|-------|-----------|
+| Legal Analyzer | Persona + Multi-contextual Prompting |
+| Tech Stack | Few-shot + Chain of Thought |
+| Dockerizer | Few-shot + Optimization |
+| JSON to Zod | Zero-shot Strict |
+| Feature Smith | Structured Prompting + Role Playing |
+
+---
+
+## 🤝 Contribution
+
+```bash
+git checkout -b feature/AmazingFeature
+git commit -m 'Add AmazingFeature'
+git push origin feature/AmazingFeature
+```
+
+---
+
+## 📄 Licence
+
+MIT License
+
+---
+
+**Made with ❤️ by 5GPT Team | Version 0.1.0 | Updated 31 Dec 2025**

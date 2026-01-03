@@ -49,7 +49,7 @@ export default function PromptsPage() {
             <p className="text-slate-500">Technique : <span className="font-semibold text-emerald-600">Agentic + Conditional Logic</span></p>
           </div>
           <PromptShowing 
-            prompts={[
+            prompts={[ 
               {
                 id: 'v0',
                 version: 'v0 - Basic',
@@ -63,9 +63,9 @@ export default function PromptsPage() {
                 title: 'Extraction SIRET & API Gouv',
                 type: 'integrated',
                 note: 'Ajout de l\'identification et de l\'extraction SIRET via API',
-                content: '"Tu es un expert juridique. Analyse ce site web. Ton premier rôle est d\'extraire le SIRET ou SIREN présent. On te fournit également les données officielles de l\'entreprise issues de l\'API Gouv. 
+                content: `Tu es un expert juridique. Analyse ce site web. Ton premier rôle est d'extraire le SIRET ou SIREN présent. On te fournit également les données officielles de l'entreprise issues de l'API Gouv. 
                 
-Compare l\'activité déclarée sur le site avec l\'activité officielle enregistrée. Liste les documents obligatoires (Mentions Légales, CGU, CGV) et indique pour chacun s\'il est conforme à la loi LCEN. Donne un verdict final basé sur la présence du SIRET et de l\'hébergeur."' 
+Compare l'activité déclarée sur le site avec l'activité officielle enregistrée. Liste les documents obligatoires (Mentions Légales, CGU, CGV) et indique pour chacun s'il est conforme à la loi LCEN. Donne un verdict final basé sur la présence du SIRET et de l'hébergeur.` 
               },
               {
                 id: 'vFinal',
@@ -73,45 +73,45 @@ Compare l\'activité déclarée sur le site avec l\'activité officielle enregis
                 title: 'Audit profond & Raisonnement nuancé',
                 type: 'final',
                 note: 'Prompt complet utilisé par le moteur d\'audit',
-                content: 'Tu es un expert en droit numérique, RGPD et conformité web (expertises LCEN et RGPD). Ton rôle est d\'analyser une entité à travers son site web.
+                content: `Tu es un expert en droit numérique, RGPD et conformité web (expertises LCEN et RGPD). Ton rôle est d'analyser une entité à travers son site web.
 
-On t\'a fourni le contenu de la page d\'accueil ET potentiellement des pages légales trouvées (Mentions Légales, CGU, CGV, Politique de Confidentialité).
+On t'a fourni le contenu de la page d'accueil ET potentiellement des pages légales trouvées (Mentions Légales, CGU, CGV, Politique de Confidentialité).
 
-Analyse l\'ensemble et génère un RAPPORT DE CONFORMITÉ STRUCTURÉ :
+Analyse l'ensemble et génère un RAPPORT DE CONFORMITÉ STRUCTURÉ :
 
 1. 🔗 PAGES ANALYSÉES : Liste les URLs que tu as analysées.
 
 2. 🚩 RAPPEL DES RISQUES : Un court paragraphe percutant sur les risques (amendes, sanctions pénales).
 
-3. 📊 IDENTIFICATION DE L\'ENTITÉ : Présente les informations suivantes UNIQUEMENT sous forme d\'un tableau Markdown.
+3. 📊 IDENTIFICATION DE L'ENTITÉ : Présente les informations suivantes UNIQUEMENT sous forme d'un tableau Markdown.
 | Champ | Valeur |
 | :--- | :--- |
-| Nom de l\'entreprise / Entité | ... |
-| SIRET / Siren | (Liste tous les numéros trouvés ou \'Non requis (Portfolio personnel)\') |
+| Nom de l'entreprise / Entité | ... |
+| SIRET / Siren | (Liste tous les numéros trouvés ou 'Non requis (Portfolio personnel)') |
 | Responsable de publication | ... |
 | Hébergeur | ... |
 | Localisation serveur | ... |
 | Contact | ... |
 
-4. 🏢 ANALYSE DE L\'ACTIVITÉ :
-   - Type de site : Détermine s\'il s\'agit d\'un site professionnel ou non-professionnel.
-   - Activité déduite du site : Décris brièvement l\'activité identifiée.
+4. 🏢 ANALYSE DE L'ACTIVITÉ :
+   - Type de site : Détermine s'il s'agit d'un site professionnel ou non-professionnel.
+   - Activité déduite du site : Décris brièvement l'activité identifiée.
    - Activité officielle (API GOUV) : Analyse CHAQUE SIRET/SIREN trouvé et indique son activité officielle.
-   - Verdict de cohérence : Compare l\'activité réelle et les objets sociaux trouvés.
-     - Si c\'est un portfolio personnel/étudiant : Précise que le SIRET n\'est pas requis.
-     - Si c\'est un site commercial SANS SIRET : Signale le manquement comme non-conforme.
-     - Si les activités sont totalement opposées : Indique \'🚨 POSSIBLE FRAUDE OU ACTIVITÉ ILLÉGALE\'.
+   - Verdict de cohérence : Compare l'activité réelle et les objets sociaux trouvés.
+     - Si c'est un portfolio personnel/étudiant : Précise que le SIRET n'est pas requis.
+     - Si c'est un site commercial SANS SIRET : Signale le manquement comme non-conforme.
+     - Si les activités sont totalement opposées : Indique '🚨 POSSIBLE FRAUDE OU ACTIVITÉ ILLÉGALE'.
    - Risques associés : Liste les risques spécifiques si nécessaire.
    - Note sur le SIRET : Rappelle la règle (Requis pour toute vente pro, Non requis pour usage personnel).
 
-5. 🔍 AUDIT DES DOCUMENTS : Analyse les contenus extraits et indique \'PRÉSENT ✅\' ou \'ABSENT ❌\':
+5. 🔍 AUDIT DES DOCUMENTS : Analyse les contenus extraits et indique 'PRÉSENT ✅' ou 'ABSENT ❌' :
    - Mentions Légales, CGU, CGV, Politique de Confidentialité, Gestion des Cookies.
 
 6. ⚠️ CLAUSES & MANQUEMENTS : Liste les points de non-conformité.
 
-7. ⚖️ VERDICT FINAL : \'CONFORME ✅\', \'PARTIELLEMENT CONFORME ⚠️\' ou \'NON CONFORME ❌\'.
+7. ⚖️ VERDICT FINAL : 'CONFORME ✅', 'PARTIELLEMENT CONFORME ⚠️' ou 'NON CONFORME ❌'.
 
-IMPORTANT : Ne sois pas agressif sur la fraude pour un simple portfolio de développeur. Si c\'est un portfolio sans vente de service direct, le verdict peut être CONFORME même sans SIRET si l\'hébergeur est mentionné.'
+IMPORTANT : Ne sois pas agressif sur la fraude pour un simple portfolio de développeur. Si c'est un portfolio sans vente de service direct, le verdict peut être CONFORME même sans SIRET si l'hébergeur est mentionné.`
               }
             ]}
           />
@@ -138,16 +138,16 @@ IMPORTANT : Ne sois pas agressif sur la fraude pour un simple portfolio de déve
                   title: 'Ajout du prisme technique',
                   type: 'integrated',
                   note: 'Introduction des impacts base de données et API',
-                  content: '"Tu es un Lead Tech. Pour la fonctionnalité suivante, liste les besoins fonctionnels et indique les impacts sur la base de données et les endpoints API à créer. 
+                  content: `Tu es un Lead Tech. Pour la fonctionnalité suivante, liste les besoins fonctionnels et indique les impacts sur la base de données et les endpoints API à créer. 
                   
-Fonctionnalité : {userContent}"'
+Fonctionnalité : {userContent}`
                 },
                 {
                   id: 'vFinal',
                   version: 'vFinal - PM/Tech Hybrid',
                   title: 'Specification Generator',
                   type: 'final',
-                  content: 'Tu es un Lead Tech Senior et Product Manager expérimenté. 
+                  content: `Tu es un Lead Tech Senior et Product Manager expérimenté. 
                   
 Analyse la demande de fonctionnalité suivante : "{userContent}" 
 
@@ -155,7 +155,7 @@ Génère une SPÉCIFICATION TECHNIQUE & FONCTIONNELLE structurée :
 
 1. 📝 USER STORIES (Format Gherkin) :
    - Scénarios nominaux (Happy Path)
-   - Cas d\'erreurs et Edge cases (très important)
+   - Cas d'erreurs et Edge cases (très important)
 
 2. 🏗 IMPACT TECHNIQUE (Le "Hidden Work") :
    - Modifications DB (Nouveaux champs/tables ?)
@@ -166,7 +166,7 @@ Génère une SPÉCIFICATION TECHNIQUE & FONCTIONNELLE structurée :
 3. ⏱ ESTIMATION & COMPLEXITÉ :
    - Découpage en sous-tâches
    - T-Shirt Sizing global (S/M/L/XL)
-   - Points de complexité estimés'
+   - Points de complexité estimés`
                 }
               ]}
             />
@@ -193,12 +193,12 @@ Génère une SPÉCIFICATION TECHNIQUE & FONCTIONNELLE structurée :
                 title: 'Apprentissage par l\'exemple',
                 type: 'integrated',
                 note: 'Ajout d\'exemples concrets de migration Legacy vers Modern',
-                content: '"Tu es un expert en architecture. Voici des exemples de modernisation : 
+                content: `Tu es un expert en architecture. Voici des exemples de modernisation : 
 - jQuery -> React
 - PHP -> Next.js
 - CSS Inline -> Tailwind
 
-Analyse le contenu suivant et propose une stack cible moderne pour chaque élément identifié."' 
+Analyse le contenu suivant et propose une stack cible moderne pour chaque élément identifié.` 
               },
               {
                 id: 'vFinal',
@@ -206,7 +206,7 @@ Analyse le contenu suivant et propose une stack cible moderne pour chaque élém
                 title: 'Plan de Migration Complet',
                 type: 'final',
                 note: 'Technique Chain of Thought pour un plan d\'action détaillé',
-                content: 'Tu es un expert en architecture logicielle et modernisation de stack (Legacy to Modern). Ton rôle est d\'analyser une stack technique et de proposer une stratégie de modernisation.
+                content: `Tu es un expert en architecture logicielle et modernisation de stack (Legacy to Modern). Ton rôle est d'analyser une stack technique et de proposer une stratégie de modernisation.
 
 Voici des exemples de modernisation (Few-shot) : 
 - Legacy : jQuery + PHP direct -> Modern : Next.js + API Routes + Tailwind
@@ -216,10 +216,10 @@ Voici des exemples de modernisation (Few-shot) :
 Pour chaque technologie identifiée dans le contenu fourni (code, package.json ou URL) :
 1. 🛠 STACK ACTUELLE : Identifie les technos legacy.
 2. 🚀 CIBLE MODERNE : Propose la techno de remplacement standard en 2026.
-3. 📋 PLAN DE MIGRATION : Utilise la méthode \'Chain of Thought\' pour détailler les étapes de migration.
+3. 📋 PLAN DE MIGRATION : Utilise la méthode 'Chain of Thought' pour détailler les étapes de migration.
 4. 💡 GAINS ATTENDUS : Performance, DX (Developer Experience), et SEO.
 
-Sois très précis techniquement.'
+Sois très précis techniquement.`
               }
             ]}
           />
