@@ -16,7 +16,8 @@ import {
   Printer,
   ListTodo,
   Mic,
-  Square
+  Square,
+  Download
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -318,6 +319,7 @@ export default function ToolPage() {
   const IconComponent = tool.icon;
 
   const isFeatureArchitect = toolId === 'feature-architect';
+  const isReadmeArchitect = toolId === 'readme-architect';
   const themeColor = isFeatureArchitect ? 'amber' : 'emerald';
   const themeText = isFeatureArchitect ? 'text-amber-600' : 'text-emerald-600';
   const themeBg = isFeatureArchitect ? 'bg-amber-600' : 'bg-emerald-600';
@@ -333,10 +335,22 @@ export default function ToolPage() {
   const emptyStateDesc = isFeatureArchitect 
     ? "Décrivez votre fonctionnalité pour obtenir un cahier des charges technique complet (User Stories, DB, API)." 
     : "Saisissez une URL ou collez un document pour générer votre rapport de conformité intelligent.";
-  const outputTitle = isFeatureArchitect ? "Spécifications Techniques" : "Rapport d\'Analyse";
+  const outputTitle = isFeatureArchitect ? "Spécifications Techniques" : isReadmeArchitect ? "README.md" : "Rapport d\'Analyse";
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleDownloadReadme = () => {
+    const blob = new Blob([output], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'README.md';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -498,13 +512,24 @@ export default function ToolPage() {
               <div className="flex items-center space-x-2">
                 {output && (
                   <>
-                    <button
-                      onClick={handlePrint}
-                      className={`p-2.5 rounded-xl bg-white border border-slate-200 ${isFeatureArchitect ? 'hover:border-amber-500 hover:text-amber-600' : 'hover:border-emerald-500 hover:text-emerald-600'} transition-all duration-200 flex items-center space-x-2 shadow-sm`}
-                    >
-                      <Printer size={18} />
-                      <span className="text-sm font-semibold">Exporter PDF</span>
-                    </button>
+                    {!isReadmeArchitect && (
+                      <button
+                        onClick={handlePrint}
+                        className={`p-2.5 rounded-xl bg-white border border-slate-200 ${isFeatureArchitect ? 'hover:border-amber-500 hover:text-amber-600' : 'hover:border-emerald-500 hover:text-emerald-600'} transition-all duration-200 flex items-center space-x-2 shadow-sm`}
+                      >
+                        <Printer size={18} />
+                        <span className="text-sm font-semibold">Exporter PDF</span>
+                      </button>
+                    )}
+                    {isReadmeArchitect && (
+                      <button
+                        onClick={handleDownloadReadme}
+                        className="p-2.5 rounded-xl bg-white border border-slate-200 hover:border-emerald-500 hover:text-emerald-600 transition-all duration-200 flex items-center space-x-2 shadow-sm"
+                      >
+                        <Download size={18} />
+                        <span className="text-sm font-semibold">Download README.md</span>
+                      </button>
+                    )}
                     <button
                       onClick={copyToClipboard}
                       className={`p-2.5 rounded-xl bg-white border border-slate-200 ${isFeatureArchitect ? 'hover:border-amber-500 hover:text-amber-600' : 'hover:border-emerald-500 hover:text-emerald-600'} transition-all duration-200 flex items-center space-x-2 shadow-sm`}
@@ -548,9 +573,11 @@ export default function ToolPage() {
 
             <div className="bg-white border border-slate-200 rounded-[2rem] min-h-[500px] shadow-sm overflow-hidden report-container relative">
               {output ? (
-                <div className={`p-8 ${isFeatureArchitect ? '' : `prose ${themeProse} max-w-none prose-headings:font-bold prose-p:text-slate-600 prose-table:border prose-table:rounded-xl prose-th:bg-slate-50 prose-th:p-3 prose-td:p-3 prose-pre:p-0 prose-pre:bg-transparent ${themePre}`}`}>
+                <div className={`p-8 ${isFeatureArchitect ? '' : isReadmeArchitect ? '' : `prose ${themeProse} max-w-none prose-headings:font-bold prose-p:text-slate-600 prose-table:border prose-table:rounded-xl prose-th:bg-slate-50 prose-th:p-3 prose-td:p-3 prose-pre:p-0 prose-pre:bg-transparent ${themePre}`}`}>
                   {isFeatureArchitect ? (
                     <SpecRenderer content={output} />
+                  ) : isReadmeArchitect ? (
+                    <pre className="whitespace-pre-wrap font-mono text-sm text-slate-800 leading-relaxed">{output}</pre>
                   ) : (
                     <ReactMarkdown 
                       remarkPlugins={[remarkGfm]}
