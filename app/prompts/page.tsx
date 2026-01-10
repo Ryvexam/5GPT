@@ -558,6 +558,65 @@ export default function PromptsPage() {
 
             </section>
 
+            {/* Docker Compose Generator */}
+            <section id="docker-compose">
+              <div className="mb-6">
+                <h3 className="text-2xl font-bold text-slate-800">5. Docker Compose Generator</h3>
+                <p className="text-slate-500">Technique : <span className="font-semibold text-cyan-600">Security-First Constraints + Structured Output</span></p>
+              </div>
+              <PromptShowing 
+                prompts={[ 
+                  {
+                    id: 'v0',
+                    version: 'v0 - Basic',
+                    title: 'Génération Naïve',
+                    type: 'basic',
+                    content: `==============================
+      "Tu es un expert Docker. Génère un fichier docker-compose.yml pour cette stack : {userContent}"
+      ==============================` 
+                  },
+                  {
+                    id: 'v1',
+                    version: 'v1 - Best Practices',
+                    title: 'Ajout des Bonnes Pratiques',
+                    type: 'integrated',
+                    note: 'Introduction des variables d\'environnement et des réseaux',
+                    content: `==============================
+      Tu es un expert DevOps. Génère un docker-compose.yml pour {userContent}.
+      
+      Assure-toi de :
+      - Utiliser un réseau dédié pour l'application.
+      - Ne pas exposer les bases de données sur Internet (ports).
+      - Utiliser des variables d'environnement pour les mots de passe.
+      ==============================`
+                  },
+                  {
+                    id: 'vFinal',
+                    version: 'vFinal - Security & Production Ready',
+                    title: 'Infrastructure Sécurisée',
+                    type: 'final',
+                    note: 'Contraintes de sécurité strictes (isolation réseau, exposition minimale) et formatage précis.',
+                    content: `==============================
+      Tu es un expert DevOps et Docker. Ton rôle est de générer un fichier docker-compose.yml sécurisé et production-ready.
+
+      RÈGLES DE SÉCURITÉ OBLIGATOIRES :
+      1. **Réseau interne isolé** : Crée un réseau Docker dédié (ex: app-network) pour la communication inter-services
+      2. **Exposition minimale** : SEUL le service web/frontend expose un port vers l'extérieur (ex: ports: "3000:3000")
+      3. **Backend protégé** : Les services backend (API, workers) ne doivent PAS avoir de section "ports:" - ils communiquent uniquement via le réseau interne
+      4. **Base de données protégée** : Les DB (PostgreSQL, MySQL, MongoDB, Redis) ne doivent JAMAIS exposer de ports. Utilise "expose:" au lieu de "ports:" pour la communication interne uniquement
+      5. **Variables d'environnement** : Utilise des variables d'environnement pour les secrets (avec \${VARIABLE} et un fichier .env exemple)
+
+      FORMAT DE RÉPONSE :
+      1. **Analyse du besoin** : 1-2 phrases résumant ce que l'utilisateur veut
+      2. **docker-compose.yml** : Le fichier complet en un seul bloc de code YAML
+      3. **Fichier .env.example** : Template des variables d'environnement (un bloc de code)
+      4. **Démarrage** : Les commandes pour lancer (docker compose up -d, etc.)
+      ==============================`
+                  }
+                ]}
+              />
+            </section>
+
     </div>
   );
 }

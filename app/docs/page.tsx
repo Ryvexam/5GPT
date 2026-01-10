@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ArrowLeft, BookOpen, ShieldCheck, Code2, FileText, ListTodo } from 'lucide-react';
+import { ArrowLeft, BookOpen, ShieldCheck, Code2, FileText, ListTodo, Container } from 'lucide-react';
 
 export default function DocsPage() {
   return (
@@ -28,7 +28,7 @@ export default function DocsPage() {
 
         <h2>1. Cartographie des Outils</h2>
         <p>
-          Nous avons sélectionné 4 outils couvrant le cycle de vie complet d'un projet web moderne :
+          Nous avons sélectionné 5 outils couvrant le cycle de vie complet d'un projet web moderne :
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 not-prose my-8">
@@ -60,6 +60,13 @@ export default function DocsPage() {
               <p className="text-xs text-slate-500 mt-1">Documentation professionnelle.</p>
             </div>
           </div>
+          <div className="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100">
+            <div className="p-2 bg-cyan-100 text-cyan-600 rounded-xl"><Container size={20}/></div>
+            <div>
+              <h4 className="font-bold text-slate-900">Docker Compose Gen</h4>
+              <p className="text-xs text-slate-500 mt-1">Infra as Code sécurisée par défaut.</p>
+            </div>
+          </div>
         </div>
 
         <h2>2. Stratégies de Prompt Engineering</h2>
@@ -79,6 +86,9 @@ export default function DocsPage() {
           </li>
           <li>
             <strong>Task Decomposition + Contextual Grounding</strong> (README Architect) : Séparation de l'analyse (fichiers, structure) et de la génération pour produire une documentation précise et ancrée dans le code réel.
+          </li>
+          <li>
+            <strong>Security-First Constraints + Structured Output</strong> (Docker Compose Gen) : Injection forcée de règles de sécurité (réseaux isolés, ports limités) et formatage strict pour une utilisation directe en production.
           </li>
         </ul>
 

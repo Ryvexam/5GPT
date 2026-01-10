@@ -113,17 +113,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
           <div className="mt-auto pt-4 sm:pt-6 border-t border-slate-100">
             <SidebarItem icon={Settings} label="Settings" active={isActive('/settings')} onClick={() => router.push('/settings')} />
-            <div className="mt-3 sm:mt-4 flex items-center space-x-2 sm:space-x-3 px-2 p-2 sm:p-3 rounded-lg sm:rounded-xl bg-slate-50 border border-slate-100">
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-slate-200 overflow-hidden flex-shrink-0">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="User" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold text-slate-700 truncate">Alex Developer</p>
-                <p className="text-[10px] text-slate-500 truncate">
-                  {config?.provider === 'openai' ? 'OpenAI' : 'Mistral AI'}
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </aside>
