@@ -17,7 +17,8 @@ import {
   ListTodo,
   Mic,
   Square,
-  Download
+  Download,
+  Container
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -82,6 +83,13 @@ const TOOLS_CONFIG = {
     icon: BookOpen,
     placeholder: 'Décris l\'outil ou colle le prompt pour générer sa documentation technique...', 
     category: 'Admin'
+  },
+  'docker-compose-generator': {
+    name: 'Docker Compose Generator',
+    description: 'Génère un docker-compose.yml sécurisé : réseau interne isolé, seul le port web exposé, backend et DB protégés.',
+    icon: Container,
+    placeholder: 'Décris ton projet (ex: "Une app Next.js avec API Node.js, PostgreSQL et Redis. Le frontend doit être accessible sur le port 3000")...',
+    category: 'DevOps'
   }
 };
 
@@ -320,22 +328,25 @@ export default function ToolPage() {
 
   const isFeatureArchitect = toolId === 'feature-architect';
   const isReadmeArchitect = toolId === 'readme-architect';
-  const themeColor = isFeatureArchitect ? 'amber' : 'emerald';
-  const themeText = isFeatureArchitect ? 'text-amber-600' : 'text-emerald-600';
-  const themeBg = isFeatureArchitect ? 'bg-amber-600' : 'bg-emerald-600';
-  const themeHover = isFeatureArchitect ? 'hover:bg-amber-700' : 'hover:bg-emerald-700';
-  const themeRing = isFeatureArchitect ? 'focus:ring-amber-500' : 'focus:ring-emerald-500';
-  const themeShadow = isFeatureArchitect ? 'shadow-amber-200' : 'shadow-emerald-200';
-  const themeProse = isFeatureArchitect ? 'prose-amber' : 'prose-emerald';
-  const themePre = isFeatureArchitect ? 'prose-pre:text-amber-400' : 'prose-pre:text-emerald-400';
+  const isDockerCompose = toolId === 'docker-compose-generator';
+  const themeColor = isFeatureArchitect ? 'amber' : isDockerCompose ? 'cyan' : 'emerald';
+  const themeText = isFeatureArchitect ? 'text-amber-600' : isDockerCompose ? 'text-cyan-600' : 'text-emerald-600';
+  const themeBg = isFeatureArchitect ? 'bg-amber-600' : isDockerCompose ? 'bg-cyan-600' : 'bg-emerald-600';
+  const themeHover = isFeatureArchitect ? 'hover:bg-amber-700' : isDockerCompose ? 'hover:bg-cyan-700' : 'hover:bg-emerald-700';
+  const themeRing = isFeatureArchitect ? 'focus:ring-amber-500' : isDockerCompose ? 'focus:ring-cyan-500' : 'focus:ring-emerald-500';
+  const themeShadow = isFeatureArchitect ? 'shadow-amber-200' : isDockerCompose ? 'shadow-cyan-200' : 'shadow-emerald-200';
+  const themeProse = isFeatureArchitect ? 'prose-amber' : isDockerCompose ? 'prose-cyan' : 'prose-emerald';
+  const themePre = isFeatureArchitect ? 'prose-pre:text-amber-400' : isDockerCompose ? 'prose-pre:text-cyan-400' : 'prose-pre:text-emerald-400';
 
-  const inputTitle = isFeatureArchitect ? "Définition du Besoin" : "Source à Analyser";
-  const buttonText = isFeatureArchitect ? "Générer les Spécifications" : "Lancer l\'Expertise AI";
-  const emptyStateTitle = isFeatureArchitect ? "Atelier de Conception" : "Prêt pour l\'analyse";
+  const inputTitle = isFeatureArchitect ? "Définition du Besoin" : isDockerCompose ? "Description du Projet" : "Source à Analyser";
+  const buttonText = isFeatureArchitect ? "Générer les Spécifications" : isDockerCompose ? "Générer le Docker Compose" : "Lancer l\'Expertise AI";
+  const emptyStateTitle = isFeatureArchitect ? "Atelier de Conception" : isDockerCompose ? "Docker Compose Generator" : "Prêt pour l\'analyse";
   const emptyStateDesc = isFeatureArchitect 
     ? "Décrivez votre fonctionnalité pour obtenir un cahier des charges technique complet (User Stories, DB, API)." 
+    : isDockerCompose
+    ? "Décrivez votre stack (frontend, backend, DB) pour générer un docker-compose.yml sécurisé."
     : "Saisissez une URL ou collez un document pour générer votre rapport de conformité intelligent.";
-  const outputTitle = isFeatureArchitect ? "Spécifications Techniques" : isReadmeArchitect ? "README.md" : "Rapport d\'Analyse";
+  const outputTitle = isFeatureArchitect ? "Spécifications Techniques" : isReadmeArchitect ? "README.md" : isDockerCompose ? "docker-compose.yml" : "Rapport d\'Analyse";
 
   const handlePrint = () => {
     window.print();
@@ -578,6 +589,20 @@ export default function ToolPage() {
                     <SpecRenderer content={output} />
                   ) : isReadmeArchitect ? (
                     <pre className="whitespace-pre-wrap font-mono text-sm text-slate-800 leading-relaxed">{output}</pre>
+                  ) : isDockerCompose ? (
+                    <ReactMarkdown 
+                      remarkPlugins={[remarkGfm]}
+                      components={{
+                        pre: ({children}) => <pre className="my-4 overflow-x-auto">{children}</pre>,
+                        code: ({node, inline, className, children, ...props}: any) => {
+                          return !inline 
+                            ? <code className="block bg-slate-900 text-slate-100 p-4 rounded-lg text-sm font-mono whitespace-pre" {...props}>{children}</code>
+                            : <code className="bg-slate-100 text-slate-700 px-1 py-0.5 rounded text-sm font-mono" {...props}>{children}</code>
+                        }
+                      }}
+                    >
+                      {output}
+                    </ReactMarkdown>
                   ) : (
                     <ReactMarkdown 
                       remarkPlugins={[remarkGfm]}

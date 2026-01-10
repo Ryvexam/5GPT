@@ -8,7 +8,8 @@ import {
   ShieldCheck,
   ArrowUpRight,
   BookOpen,
-  ListTodo
+  ListTodo,
+  Container
 } from 'lucide-react';
 
 const ToolCard = ({ tool, onClick, className = "" }: { tool: any; onClick: () => void; className?: string }) => (
@@ -109,6 +110,15 @@ const App = () => {
       icon: FileText,
       iconBg: "from-emerald-50 to-teal-50",
       iconColor: "text-emerald-600"
+    },
+    {
+      id: 'docker-compose-generator',
+      name: "Docker Compose Generator",
+      category: "DevOps",
+      description: "Génère un docker-compose.yml sécurisé : réseau interne isolé, seul le port web exposé, backend et DB protégés.",
+      icon: Container,
+      iconBg: "from-cyan-50 to-blue-50",
+      iconColor: "text-cyan-600"
     }
   ];
 
