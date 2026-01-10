@@ -132,8 +132,22 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           <span className="ml-4 font-bold text-slate-800">ToolsWithAI</span>
         </header>
 
-        <main className="flex-1">
-          {children}
+        <main className="flex-1 flex flex-col">
+          <div className="flex-1">
+            {children}
+          </div>
+          
+          <footer className="py-8 px-8 border-t border-slate-200 mt-auto bg-white/50">
+            <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500 font-medium">
+              <div className="flex space-x-6">
+                <a href="/terms" className="hover:text-emerald-600 transition-colors">Mentions Légales & CGU</a>
+                <a href="/privacy" className="hover:text-emerald-600 transition-colors">Politique de Confidentialité</a>
+              </div>
+              <div>
+                &copy; {new Date().getFullYear()} ToolsWithAI. Tous droits réservés.
+              </div>
+            </div>
+          </footer>
         </main>
       </div>
     </div>
