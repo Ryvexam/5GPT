@@ -241,7 +241,6 @@ Après implémentation, vérifier:
 - [ ] P3 implémenté: Logging des événements de sécurité
 - [ ] Tests manuels: Relire [SECURITY.md](./SECURITY.md) Test 3 (SIRET DDOS)
 - [ ] Documentation: Mettre à jour README avec mention de sécurité
-- [ ] Deploy: Tester en production sur Vercel
 
 ---
 

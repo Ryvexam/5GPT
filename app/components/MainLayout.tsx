@@ -12,7 +12,8 @@ import {
   BookOpen,
   ListTodo,
   FileText,
-  ShieldCheck
+  ShieldCheck,
+  Container
 } from 'lucide-react';
 
 const SidebarItem = ({ icon: Icon, label, active = false, onClick }: { icon: any; label: string; active?: boolean; onClick?: () => void }) => (
@@ -63,6 +64,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     { id: 'tech-stack-modernizer', name: "Stack Modernizer", path: "/tools/tech-stack-modernizer", icon: Code2 },
     { id: 'feature-architect', name: "Feature Smith", path: "/tools/feature-architect", icon: ListTodo },
     { id: 'readme-architect', name: "README Architect", path: "/tools/readme-architect", icon: FileText },
+    { id: 'docker-compose-generator', name: "Docker Compose", path: "/tools/docker-compose-generator", icon: Container },
   ];
 
   const isActive = (path: string) => pathname === path || pathname?.startsWith(path + '/');

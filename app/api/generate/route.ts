@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 const SYSTEM_PROMPTS = {
   'docker-compose-generator': `Tu es un expert DevOps et Docker. Ton rôle est de générer un fichier docker-compose.yml sécurisé et production-ready.
 
@@ -716,7 +718,8 @@ export async function POST(request: NextRequest) {
 
     return new Response(stream, {
       headers: {
-        'Content-Type': 'text/event-stream',
+        'Content-Type': 'text/plain; charset=utf-8',
+        'X-Content-Type-Options': 'nosniff',
         'Cache-Control': 'no-cache',
         'Connection': 'keep-alive',
       },
