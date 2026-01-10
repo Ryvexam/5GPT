@@ -1,5 +1,5 @@
 Guide de lancement du projet 5GPT
-
+Application disponible également sur : https://ai.ryvexam.fr/
 Installation
 
     git clone https://github.com/Ryvexam/5GPT.git
@@ -48,3 +48,5 @@ Pour chaque outil, les versions suivantes sont disponibles :
 -   vFinal
 
 Chaque outil dispose de ces trois versions.
+
+
