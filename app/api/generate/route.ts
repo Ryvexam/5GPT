@@ -611,7 +611,7 @@ export async function POST(request: NextRequest) {
           }
         ],
         temperature: 0.1,
-        max_tokens: 2000,
+        max_tokens: 8000,
         stream: true, // Enable streaming
       };
     } else if (provider === 'mistral') {
@@ -642,7 +642,7 @@ export async function POST(request: NextRequest) {
           }
         ],
         temperature: 0.1,
-        max_tokens: 2000,
+        max_tokens: 8000,
         stream: true, // Enable streaming
       };
     } else {
